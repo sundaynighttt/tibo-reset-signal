@@ -94,6 +94,15 @@ struct SignalPayload: Codable, Equatable, Sendable {
     let lastSeenPostId: String?
     let evidence: [SignalEvidence]
 
+    var latestEvidence: SignalEvidence? {
+        evidence.max { lhs, rhs in
+            if lhs.detectedAt != rhs.detectedAt {
+                return lhs.detectedAt < rhs.detectedAt
+            }
+            return lhs.postId.localizedStandardCompare(rhs.postId) == .orderedAscending
+        }
+    }
+
     func effectiveLevel(now: Date = Date()) -> SignalLevel {
         guard
             source.status == "ok",
