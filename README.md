@@ -11,6 +11,25 @@ Tibo Reset Signal은 [@thsottiaux](https://x.com/thsottiaux)의 공개 포스트
 
 > 이 프로젝트는 X, OpenAI 또는 Tibo의 공식 제품이 아닙니다. 신호는 공개 포스트를 기반으로 한 규칙 기반 추정이며 실제 리셋을 보장하지 않습니다.
 
+<!-- project-release-ledger:start -->
+## 릴리스 기준과 전체 버전 흐름
+
+> 자동 관리 원장: [`docs/releases/release-ledger.json`](docs/releases/release-ledger.json) · 갱신일: `2026-09-04`
+
+### 현재 기준선
+
+| 기준 | 버전 | 단계 | 상태 | 요약 | 근거 |
+| --- | --- | --- | --- | --- | --- |
+| 최신 후보<br>`latest_candidate` | **`0.1.0`** | `released` | `active` | macOS DMG와 Windows ZIP을 공개하고 체크섬 및 패키지 구성을 검증한 첫 데스크톱 릴리스 | `git:v0.1.0`<br>[외부 근거](https://github.com/sundaynighttt/tibo-reset-signal/actions/runs/33785528326)<br>[외부 근거](https://github.com/sundaynighttt/tibo-reset-signal/releases/tag/v0.1.0) |
+| 외부 공개 최신<br>`last_external` | **`0.1.0`** | `released` | `active` | macOS DMG와 Windows ZIP을 공개하고 체크섬 및 패키지 구성을 검증한 첫 데스크톱 릴리스 | `git:v0.1.0`<br>[외부 근거](https://github.com/sundaynighttt/tibo-reset-signal/actions/runs/33785528326)<br>[외부 근거](https://github.com/sundaynighttt/tibo-reset-signal/releases/tag/v0.1.0) |
+
+### 전체 버전 흐름
+
+| 순서 | 날짜 | 버전 | 단계 | 상태 | 요약 | 근거 |
+| ---: | --- | --- | --- | --- | --- | --- |
+| 1 | 2026-09-04 | `0.1.0` | `released` | `active` | macOS DMG와 Windows ZIP을 공개하고 체크섬 및 패키지 구성을 검증한 첫 데스크톱 릴리스 | `git:v0.1.0`<br>[외부 근거](https://github.com/sundaynighttt/tibo-reset-signal/actions/runs/33785528326)<br>[외부 근거](https://github.com/sundaynighttt/tibo-reset-signal/releases/tag/v0.1.0) |
+<!-- project-release-ledger:end -->
+
 ## 신호 의미
 
 | 상태 | 의미 |
@@ -45,12 +64,14 @@ X의 공개 잔액 API가 현재 계정에서 동작하지 않으므로 크레�
 
 ## 설치
 
-GitHub Releases가 제공되면 다음 파일을 내려받을 수 있습니다.
+최신 버전은 [GitHub Releases](https://github.com/sundaynighttt/tibo-reset-signal/releases/latest)에서 내려받을 수 있습니다.
 
 | 운영체제 | 파일 | 지원 환경 |
 | --- | --- | --- |
-| macOS | `TiboResetSignal-macOS-<버전>.dmg` | macOS 13 이상 |
+| macOS | `TiboResetSignal-macOS-<버전>.dmg` | macOS 13 이상, Apple Silicon |
 | Windows | `TiboResetSignal-Windows-<버전>.zip` | Windows 10/11 |
+
+첫 공개 릴리스의 macOS 앱은 Developer ID 서명·Apple 공증 전이며 Windows 실행 파일도 아직 코드 서명되지 않았습니다. 설치 전 공개 소스와 릴리스의 `SHA256SUMS.txt`를 확인하세요. 운영체제의 실행 차단을 해제하는 방법은 각 릴리스 설명에 적어두었습니다.
 
 iPhone 앱은 Xcode로 직접 빌드할 수 있으며 TestFlight 배포는 별도 릴리스 단계에서 진행합니다.
 
