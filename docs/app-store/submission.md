@@ -7,8 +7,12 @@
 - 버전: `1.0 (9)` · iPhone 전용 · iOS 17 이상
 - 배포용 archive와 서명 검증 완료, 2026-09-04 KST App Store Connect 업로드 성공.
 - 심사 요청 전. 업로드 성공을 처리 완료·심사 제출·승인으로 간주하지 않는다.
-- 미확정: 심사 연락처(이름·성·전화번호·이메일), 타사 콘텐츠 이용 권한 선언.
+- 미확정: 심사 연락처(이름·성·전화번호·이메일), 타사 콘텐츠 이용 권한 선언, 개인정보 답변 게시에 수반되는 정확성·법 준수·변경 시 갱신 동의.
 - 출시 방식: 수동 출시. 심사 통과와 일반 공개는 별도 단계다.
+- App Store Connect 저장 확인: 한국어 부제·유틸리티 카테고리, 로그인 불필요·수동 출시, 개인정보 처리방침 URL, 6.9형 스크린샷 2장(상태 → 안내).
+- 제품 설명·프로모션 문구·키워드·지원 URL·저작권·심사 메모는 입력했으나 빈 심사 연락처가 저장 검증을 막는다. 브라우저 초안과 아래 원문을 보존했다.
+- 개인정보 유형·용도·연결·추적 문답은 작성했으나 게시 동의 전이다.
+- 확인 답변 수신 후 연령 등급·무료 가격과 배포 지역·새 빌드 선택·전체 필수 항목 검증을 마무리하고 심사에 제출한다.
 
 ## 공개 메타데이터
 
@@ -26,7 +30,7 @@
 
 마케팅 URL: https://github.com/sundaynighttt/tibo-reset-signal
 
-개인정보 처리방침: [`../privacy-policy.md`](../privacy-policy.md). 공개 후 검증된 영구 커밋 URL을 App Store Connect에 입력한다.
+개인정보 처리방침: [검증된 공개 영구 커밋 URL](https://github.com/sundaynighttt/tibo-reset-signal/blob/48daed37c4820f94902bace67e6cb58596059cfd/docs/privacy-policy.md)을 App Store Connect에 저장했다. HTTP 200 및 공개 원문 확인 완료.
 
 ### 프로모션 텍스트
 
@@ -76,6 +80,8 @@ The app displays developer-calculated indicators and reason codes, not copies of
 - App Group의 UserDefaults: 공개 상태 캐시 공유. 앱과 위젯에 `CA92.1`, `1C8F.1` 사용 사유를 포함했다.
 - 네트워크: 공개 GitHub Pages JSON의 HTTPS GET. 원문·지원·콘솔은 외부 앱/브라우저로 이동한다.
 - 호스팅의 IP/HTTP 접속 기록 처리 가능성을 개인정보 처리방침에 명시했다. 서버 로그를 전혀 수집하지 않는다고 단정하지 않는다.
+- App Store Connect 초안은 호스팅의 접속 기록을 보수적으로 `기타 진단 데이터 / 앱 기능 / 사용자에게 연결될 수 있음 / 추적 미사용`으로 분류했다. 수집 전 비식별화가 보장된다는 근거가 없어 비연결로 단정하지 않았다. 이는 앱에 새 분석 SDK나 사용자 프로필 기능을 추가했다는 뜻이 아니다.
+- 개인정보 문답 게시 시 Apple이 정확성·법 준수·변경 시 갱신 동의를 요구하므로 운영자 확인 전 게시하지 않았다.
 - 암호화: OS 제공 HTTPS만 사용하며 `ITSAppUsesNonExemptEncryption = false`.
 - 콘텐츠 권한: Apple은 타사 콘텐츠에 접근하는 앱도 권한 확인을 요구한다. 원문 링크가 있으므로 ‘타사 콘텐츠 없음’으로 우회하지 않는다. 운영자의 권한 확인 없이 권한 보유를 선언하지 않는다.
 
@@ -86,3 +92,5 @@ The app displays developer-calculated indicators and reason codes, not copies of
 - `dist/app-store-screenshots/02-guide.png`: 실제 앱의 신호 안내 화면.
 - 합성 리셋 신호나 가상의 사용자 계정 잔액을 사용하지 않았다.
 - 심사 연락처는 공개 저장소에 기록하지 않는다.
+- 로컬 검증: XCTest 3개·Python 수집기 테스트 15개·서명 검증·개인정보 사유 plist 검사·릴리스 원장 검사 통과.
+- PR #7의 GitHub CI에서 수집기·macOS·Windows 검사는 통과했으며 iPhone 검사는 마지막 확인 시 실행 중이었다.
