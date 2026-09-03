@@ -4,15 +4,16 @@
 
 - 앱: Reset Signal (이전 이름: Tibo Reset Signal) · Apple ID `6808099012`
 - 번들: `com.sundaynighttt.tiboresetsignal.ios`
-- 버전: `1.0 (10)` · iPhone 전용 · iOS 17 이상 · 표시명 변경 후보, Apple 처리 완료
+- 버전: `1.0 (10)` · iPhone 전용 · iOS 17 이상 · App Store 심사 대기 중
 - 이전 `1.0 (9)`는 App Store Connect 처리 완료 및 심사 빌드 연결을 확인했다. 새 빌드 10의 검증·업로드 상태는 아래에 별도로 기록한다.
-- 심사 요청 전. 업로드 성공을 처리 완료·심사 제출·승인으로 간주하지 않는다.
-- 미확정: 타사 콘텐츠 이용 권한 선언, 연령 등급·무료 가격과 배포 지역·전체 필수 항목 검증.
+- 2026-09-04 08:23 KST에 최종 제출하고, 제출 상세에서 `1.0 (10) / 심사 대기 중`을 확인했다. [심사 건](https://appstoreconnect.apple.com/apps/6808099012/distribution/reviewsubmissions/details/6c474e45-34b1-4cfc-aed6-0611f9af356d) ID는 `6c474e45-34b1-4cfc-aed6-0611f9af356d`다.
+- 필수 항목 검증 통과: 연령 등급 기본 4+·대한민국 전체 이용가, 무료 가격, 175개 국가·지역의 출시 후 사용 가능 설정. Apple Silicon Mac·Apple Vision Pro에서의 iPhone 앱 제공은 해제했다.
+- 심사 승인·일반 공개는 아직 아니다. 접수 완료를 콘텐츠 권한이나 심사 적합성 검증으로 간주하지 않는다.
 - 출시 방식: 수동 출시. 심사 통과와 일반 공개는 별도 단계다.
 - App Store Connect 저장 확인: 한국어 부제·유틸리티 카테고리, 로그인 불필요·수동 출시, 개인정보 처리방침 URL, 6.9형 스크린샷 2장(상태 → 안내).
 - 이전 이름의 제품 설명·프로모션 문구·키워드·지원 URL·저작권·심사 메모와 연락처 저장 및 재접속 후 보존을 확인했다. 연락처 값은 공개 문서에 기록하지 않는다.
 - 개인정보 유형·용도·연결·추적 문답은 App Store Connect에서 게시된 상태를 확인했다.
-- 새 이름·설명·프로모션 문구·심사 메모 저장과 스크린샷 2장 교체를 완료했다. 빌드 10은 Apple 처리 완료(`제출 준비 완료`) 및 기존 내부 테스터 그룹 연결을 확인하고, App Store 버전 1.0의 제출 빌드로 선택·저장했다. 콘텐츠 권한 선언은 이름 변경 승인과 별개의 확인 사항이다.
+- 새 이름·설명·프로모션 문구·심사 메모 저장과 스크린샷 2장 교체를 완료했다. 빌드 10은 Apple 처리 완료 및 기존 내부 테스터 그룹 연결을 확인하고, App Store 버전 1.0의 제출 빌드로 선택·저장한 뒤 최종 심사에 제출했다.
 
 ## 이름 변경 범위
 
@@ -90,7 +91,7 @@ The shared collector currently analyzes public posts by @thsottiaux using fixed 
 - App Store Connect 초안은 호스팅의 접속 기록을 보수적으로 `기타 진단 데이터 / 앱 기능 / 사용자에게 연결될 수 있음 / 추적 미사용`으로 분류했다. 수집 전 비식별화가 보장된다는 근거가 없어 비연결로 단정하지 않았다. 이는 앱에 새 분석 SDK나 사용자 프로필 기능을 추가했다는 뜻이 아니다.
 - 개인정보 문답은 현재 게시된 상태를 확인했다. 이번 표시명 변경으로 개인정보 처리 방식이나 게시된 문답을 변경하지 않는다.
 - 암호화: OS 제공 HTTPS만 사용하며 `ITSAppUsesNonExemptEncryption = false`.
-- 콘텐츠 권한: Apple은 타사 콘텐츠에 접근하는 앱도 권한 확인을 요구한다. 원문 링크가 있으므로 ‘타사 콘텐츠 없음’으로 우회하지 않는다. 운영자의 권한 확인 없이 권한 보유를 선언하지 않는다.
+- 콘텐츠 권한 문답은 운영자가 App Store Connect에서 직접 작성·저장했다. 저장 값은 `타사 콘텐츠 포함·표시·이용 없음`이다. 앱이 게시물 원문을 복제하지 않는다는 점과 별개로, 운영 수집기의 공개 X 게시물 분석 및 앱의 외부 원문 링크를 설명·심사 메모에 명시했다. 이 문답의 적용 해석과 필요한 이용 권한이 심사 접수만으로 검증된 것은 아니며, 심사 질의가 오면 실제 동작을 기준으로 재확인한다.
 
 ## 스크린샷과 검증 경계
 
@@ -102,5 +103,5 @@ The shared collector currently analyzes public posts by @thsottiaux using fixed 
 - 로컬 검증: XCTest 4개·Python 수집기 테스트 15개·서명 검증·앱과 위젯의 개인정보 사유 plist·릴리스 원장 검사 통과. 앱·위젯의 표시명, 빌드 10, 기존 번들 ID·App Group 유지를 확인했다.
 - 시뮬레이터에서 앱·안내 화면과 기존 위젯의 새 제목 레이아웃을 확인했다. 기존 홈 화면 위젯 아래 시스템 이름에는 이전 이름 캐시가 남아 있어, 실기기 업데이트 후 시스템 레이블 갱신은 별도 확인이 필요하다.
 - 이전 PR #7의 GitHub CI는 수집기·macOS·Windows·iPhone 모두 통과했다.
-- 빌드 10: `ResetSignal-1.0-10.xcarchive` 생성 및 서명 검증 완료. 2026-09-04 06:34 KST에 Xcode의 `Upload succeeded`·`EXPORT SUCCEEDED`를 확인했다. 이후 [TestFlight 빌드 10](https://appstoreconnect.apple.com/teams/8874948e-3fee-4bea-a414-67a4c0f0e7d8/apps/6808099012/testflight/ios/89796342-3823-4991-914a-3ac49fceefa0)의 처리 완료와 제출 버전 연결을 확인했다. 최종 심사 요청·승인·일반 공개는 아직 아니다.
+- 빌드 10: `ResetSignal-1.0-10.xcarchive` 생성 및 서명 검증 완료. 2026-09-04 06:34 KST에 Xcode의 `Upload succeeded`·`EXPORT SUCCEEDED`를 확인했다. 이후 [TestFlight 빌드 10](https://appstoreconnect.apple.com/teams/8874948e-3fee-4bea-a414-67a4c0f0e7d8/apps/6808099012/testflight/ios/89796342-3823-4991-914a-3ac49fceefa0)의 처리 완료와 제출 버전 연결을 확인했다. 08:23 KST에 App Store 심사 접수까지 완료했으며 승인·일반 공개는 대기한다.
 - 코드와 한국어 문서는 PR #7 기반의 [PR #8](https://github.com/sundaynighttt/tibo-reset-signal/pull/8)로 분리했으며 병합 전이다.

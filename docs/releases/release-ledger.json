@@ -174,9 +174,10 @@
       "date": "2026-09-04",
       "stage": "external_processed",
       "status": "active",
-      "summary": "Reset Signal 표시명과 운영자 발행 지표 중심 설명을 적용. Apple 처리 완료·내부 테스터 연결 확인, 스토어 문구·스크린샷 교체 완료, 심사 제출 전",
+      "summary": "Reset Signal 표시명과 운영자 발행 지표 중심 설명을 적용. 2026-09-04 App Store 최종 심사 제출·심사 대기 중 확인, 승인·수동 출시 대기",
       "evidence": [
         "git:a73892e",
+        "https://appstoreconnect.apple.com/apps/6808099012/distribution/reviewsubmissions/details/6c474e45-34b1-4cfc-aed6-0611f9af356d",
         "https://appstoreconnect.apple.com/teams/8874948e-3fee-4bea-a414-67a4c0f0e7d8/apps/6808099012/testflight/ios/89796342-3823-4991-914a-3ac49fceefa0",
         "ios/project.yml",
         "docs/app-store/submission.md"
