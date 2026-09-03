@@ -1,15 +1,19 @@
-# Security Policy
+# 보안 정책 / Security Policy
 
-## Reporting
+## 제보 방법
 
-Do not open a public issue containing API keys, access tokens, cookies, signing certificates, or private user data. Report a vulnerability through GitHub's private vulnerability reporting feature when available.
+API 키, 액세스 토큰, 쿠키, 서명 인증서 또는 비공개 사용자 데이터가 포함된 공개 이슈를 만들지 마세요. 가능하면 GitHub의 비공개 취약점 제보 기능으로 알려주세요.
 
-## Data boundary
+## 데이터 경계
 
-- End-user apps only request the public `latest.json` document.
-- The maintainer X API token belongs only in the `X_BEARER_TOKEN` Actions Secret.
-- Workflows triggered by pull requests never receive the collector secret.
-- Public output must not contain X API responses or full Post text.
-- The public credit value is a local estimate derived from an operator-provided baseline and billable resource counts; it is not a Developer Console balance response.
+- 최종 사용자 앱은 공개 `latest.json` 문서만 요청합니다.
+- 운영자의 X API 토큰은 Actions Secret인 `X_BEARER_TOKEN`에만 저장합니다.
+- Pull Request로 실행되는 워크플로에는 수집기 Secret을 전달하지 않습니다.
+- 공개 산출물에는 X API 응답이나 포스트 원문 전체가 포함되면 안 됩니다.
+- 공개 크레딧 값은 운영자가 입력한 기준 잔액과 과금 리소스 수로 계산한 로컬 추정치이며, Developer Console이 반환한 실제 잔액이 아닙니다.
 
-If a secret is exposed, revoke it before investigating the application code.
+Secret이 노출됐다면 애플리케이션 코드를 조사하기 전에 먼저 폐기하세요.
+
+## English summary
+
+Never disclose credentials or private user data in a public issue. End-user apps read only the public `latest.json`; the maintainer token stays in GitHub Actions Secrets, pull-request workflows do not receive it, and public output excludes raw API responses and full post text. The displayed API-credit value is an estimate, not an official Developer Console balance. Revoke any exposed secret before investigating the code.
