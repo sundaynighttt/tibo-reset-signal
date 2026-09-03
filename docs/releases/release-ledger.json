@@ -1,0 +1,33 @@
+{
+  "schemaVersion": 1,
+  "project": "tibo-reset-signal",
+  "updatedAt": "2026-09-04",
+  "pointers": [
+    {
+      "key": "latest_candidate",
+      "label": "최신 후보",
+      "releaseId": "v0-1-0"
+    },
+    {
+      "key": "last_external",
+      "label": "외부 공개 최신",
+      "releaseId": "v0-1-0"
+    }
+  ],
+  "releases": [
+    {
+      "id": "v0-1-0",
+      "sequence": 1,
+      "version": "0.1.0",
+      "date": "2026-09-04",
+      "stage": "released",
+      "status": "active",
+      "summary": "macOS DMG와 Windows ZIP을 공개하고 체크섬 및 패키지 구성을 검증한 첫 데스크톱 릴리스",
+      "evidence": [
+        "git:v0.1.0",
+        "https://github.com/sundaynighttt/tibo-reset-signal/actions/runs/33785528326",
+        "https://github.com/sundaynighttt/tibo-reset-signal/releases/tag/v0.1.0"
+      ]
+    }
+  ]
+}
