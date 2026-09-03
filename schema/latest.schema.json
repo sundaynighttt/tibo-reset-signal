@@ -1,0 +1,54 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://sundaynighttt.github.io/tibo-reset-signal/latest.schema.json",
+  "title": "Tibo Reset Signal payload",
+  "type": "object",
+  "required": ["schemaVersion", "target", "signal", "source", "evidence"],
+  "properties": {
+    "schemaVersion": { "const": 1 },
+    "target": {
+      "type": "object",
+      "required": ["username", "userId"],
+      "properties": {
+        "username": { "type": "string" },
+        "userId": { "type": ["string", "null"] }
+      }
+    },
+    "signal": {
+      "type": "object",
+      "required": ["level", "score", "summary"],
+      "properties": {
+        "level": { "enum": ["red", "yellow", "green"] },
+        "score": { "type": "integer", "minimum": 0, "maximum": 10 },
+        "summary": { "type": "string" }
+      }
+    },
+    "source": {
+      "type": "object",
+      "required": ["status", "checkedAt", "lastSuccessfulCheckAt"],
+      "properties": {
+        "status": { "enum": ["pending", "ok", "error"] },
+        "checkedAt": { "type": ["string", "null"], "format": "date-time" },
+        "lastSuccessfulCheckAt": { "type": ["string", "null"], "format": "date-time" },
+        "message": { "type": "string" }
+      }
+    },
+    "lastSeenPostId": { "type": ["string", "null"] },
+    "evidence": {
+      "type": "array",
+      "maxItems": 5,
+      "items": {
+        "type": "object",
+        "required": ["postId", "url", "score", "reasonCodes", "detectedAt", "activeUntil"],
+        "properties": {
+          "postId": { "type": "string" },
+          "url": { "type": "string", "format": "uri" },
+          "score": { "type": "integer", "minimum": 0, "maximum": 10 },
+          "reasonCodes": { "type": "array", "items": { "type": "string" } },
+          "detectedAt": { "type": "string", "format": "date-time" },
+          "activeUntil": { "type": "string", "format": "date-time" }
+        }
+      }
+    }
+  }
+}

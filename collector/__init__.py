@@ -1,0 +1,1 @@
+"""Tibo Reset Signal collector."""

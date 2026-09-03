@@ -1,0 +1,19 @@
+{
+  "schemaVersion": 1,
+  "target": {
+    "username": "thsottiaux",
+    "userId": null
+  },
+  "signal": {
+    "level": "red",
+    "score": 0,
+    "summary": "No active reset signal"
+  },
+  "source": {
+    "status": "pending",
+    "checkedAt": null,
+    "lastSuccessfulCheckAt": null
+  },
+  "lastSeenPostId": null,
+  "evidence": []
+}

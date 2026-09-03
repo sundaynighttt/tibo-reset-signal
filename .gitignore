@@ -1,0 +1,9 @@
+.DS_Store
+dist/
+macos/.build/
+macos/dist/
+ios/TiboResetSignal.xcodeproj/
+windows/**/bin/
+windows/**/obj/
+__pycache__/
+*.pyc
