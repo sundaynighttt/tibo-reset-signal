@@ -13,6 +13,7 @@ struct TiboResetSignalWidget: Widget {
         .configurationDisplayName("Tibo Reset Signal")
         .description("Codex 리셋 가능성을 신호등으로 표시합니다.")
         .supportedFamilies([.systemSmall])
+        .contentMarginsDisabled()
     }
 }
 
@@ -59,53 +60,131 @@ struct TiboResetSignalWidgetView: View {
 
     var body: some View {
         let level = entry.payload?.effectiveLevel(now: entry.date) ?? .stale
-        VStack(alignment: .leading, spacing: 0) {
-            HStack {
-                Text("Reset")
-                    .font(.headline)
-                    .foregroundStyle(.secondary)
-                Spacer()
-                Button(intent: RefreshSignalIntent()) {
-                    Image(systemName: "arrow.clockwise")
-                        .font(.system(size: 12, weight: .semibold))
-                        .frame(width: 28, height: 28)
-                        .background(.quaternary, in: Circle())
+        ZStack(alignment: .topLeading) {
+            SignalOrb(level: level)
+                .offset(x: -112, y: -108)
+
+            VStack(alignment: .trailing, spacing: 7) {
+                HStack(spacing: 6) {
+                    Spacer()
+
+                    Button(intent: RefreshSignalIntent()) {
+                        Image(systemName: "arrow.clockwise")
+                            .font(.system(size: 10, weight: .bold))
+                            .frame(width: 24, height: 24)
+                            .background(.thinMaterial, in: Circle())
+                    }
+                    .buttonStyle(.plain)
+                    .tint(.secondary)
+                    .accessibilityLabel("리셋 신호 새로고침")
+
+                    Text("Tibo Reset")
+                        .font(.caption.weight(.bold))
+                        .foregroundStyle(.secondary)
                 }
-                .buttonStyle(.plain)
-                .tint(.secondary)
-                .accessibilityLabel("리셋 신호 새로고침")
+
+                Spacer(minLength: 0)
+
+                Text(statusText)
+                    .font(.system(size: 15, weight: .bold, design: .rounded))
+                    .lineLimit(1)
+                    .minimumScaleFactor(0.75)
+
+                LatestEvidenceView(evidence: entry.payload?.latestEvidence)
             }
-
-            Spacer(minLength: 4)
-
-            Circle()
-                .fill(level.color.gradient)
-                .frame(width: 54, height: 54)
-                .shadow(color: level.color.opacity(0.3), radius: 10)
-                .accessibilityHidden(true)
-
-            Spacer(minLength: 5)
-
-            Text(level.title)
-                .font(.headline)
-                .lineLimit(1)
-                .minimumScaleFactor(0.8)
-
-            Text(scoreText)
-                .font(.caption.monospacedDigit().weight(.semibold))
-                .foregroundStyle(.secondary)
+            .padding(12)
         }
-        .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .leading)
-        .widgetURL(entry.payload?.evidence.first?.url ?? URL(string: "https://x.com/thsottiaux"))
-        .accessibilityElement(children: .ignore)
-        .accessibilityLabel("Tibo 리셋 신호, \(level.title), \(scoreText)")
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
+        .clipped()
+        .accessibilityElement(children: .contain)
     }
 
-    private var scoreText: String {
-        guard let payload = entry.payload, payload.effectiveLevel(now: entry.date) != .stale else {
-            return "확인 지연"
+    private var statusText: String {
+        guard let payload = entry.payload else {
+            return SignalLevel.stale.title
         }
-        return "\(payload.signal.score) / 10"
+        let level = payload.effectiveLevel(now: entry.date)
+        guard level != .stale else { return level.title }
+        return "\(level.title) (\(payload.signal.score)/10)"
+    }
+}
+
+private struct SignalOrb: View {
+    let level: SignalLevel
+
+    var body: some View {
+        Circle()
+            .fill(
+                RadialGradient(
+                    colors: [
+                        level.color.opacity(0.98),
+                        level.color.opacity(0.72),
+                        level.color.opacity(0.18)
+                    ],
+                    center: .center,
+                    startRadius: 4,
+                    endRadius: 110
+                )
+            )
+            .overlay {
+                Circle()
+                    .stroke(.white.opacity(0.2), lineWidth: 1)
+                    .padding(10)
+            }
+            .frame(width: 220, height: 220)
+            .shadow(color: level.color.opacity(0.38), radius: 24, x: 8, y: 12)
+            .accessibilityHidden(true)
+    }
+}
+
+private struct LatestEvidenceView: View {
+    let evidence: SignalEvidence?
+
+    var body: some View {
+        if let evidence {
+            Link(destination: evidence.url) {
+                evidenceLabel(reasonText: reasonText(for: evidence), showsLink: true)
+            }
+            .buttonStyle(.plain)
+            .accessibilityLabel("최신 근거, \(reasonText(for: evidence)), 원문 열기")
+        } else {
+            evidenceLabel(reasonText: "최근 근거 없음", showsLink: false)
+                .accessibilityLabel("최근 근거 없음")
+        }
+    }
+
+    private func evidenceLabel(reasonText: String, showsLink: Bool) -> some View {
+        VStack(alignment: .leading, spacing: 3) {
+            HStack(spacing: 4) {
+                Text("최신 근거")
+                    .font(.caption2.weight(.semibold))
+                    .foregroundStyle(.secondary)
+
+                Spacer(minLength: 0)
+
+                if showsLink {
+                    Image(systemName: "arrow.up.right")
+                        .font(.system(size: 8, weight: .bold))
+                        .foregroundStyle(.secondary)
+                }
+            }
+
+            Text(reasonText)
+                .font(.caption.weight(.semibold))
+                .lineLimit(2)
+                .multilineTextAlignment(.leading)
+        }
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .padding(.horizontal, 9)
+        .padding(.vertical, 7)
+        .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: 12, style: .continuous))
+    }
+
+    private func reasonText(for evidence: SignalEvidence) -> String {
+        let reasons = evidence.reasonCodes
+            .prefix(2)
+            .map { SignalFormatter.reason($0) }
+        return reasons.isEmpty ? "관련 포스트 감지" : reasons.joined(separator: " · ")
     }
 }
 

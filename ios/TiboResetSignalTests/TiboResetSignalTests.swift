@@ -46,4 +46,40 @@ final class TiboResetSignalTests: XCTestCase {
         )
         XCTAssertEqual(payload.effectiveLevel(now: now), .stale)
     }
+
+    func testLatestEvidenceUsesDetectionTimeInsteadOfScoreOrder() {
+        let now = Date()
+        let older = SignalEvidence(
+            postId: "100",
+            url: URL(string: "https://x.com/thsottiaux/status/100")!,
+            score: 9,
+            reasonCodes: ["explicit_reset"],
+            detectedAt: now.addingTimeInterval(-60),
+            activeUntil: now.addingTimeInterval(3_600)
+        )
+        let newer = SignalEvidence(
+            postId: "101",
+            url: URL(string: "https://x.com/thsottiaux/status/101")!,
+            score: 3,
+            reasonCodes: ["usage_context"],
+            detectedAt: now,
+            activeUntil: now.addingTimeInterval(3_600)
+        )
+        let payload = SignalPayload(
+            schemaVersion: 1,
+            target: SignalTarget(username: "thsottiaux", userId: "1"),
+            signal: SignalSummary(level: .yellow, score: 5, summary: "Possible reset signal"),
+            source: SignalSource(
+                status: "ok",
+                checkedAt: now,
+                lastSuccessfulCheckAt: now,
+                message: nil
+            ),
+            apiCredits: nil,
+            lastSeenPostId: newer.postId,
+            evidence: [older, newer]
+        )
+
+        XCTAssertEqual(payload.latestEvidence, newer)
+    }
 }
