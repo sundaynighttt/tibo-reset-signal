@@ -69,7 +69,7 @@ struct TiboResetSignalWidgetView: View {
             }
             .overlay {
                 VStack(alignment: .leading, spacing: 7) {
-                    HStack(alignment: .top) {
+                    HStack(alignment: .center) {
                         Text("Tibo Reset")
                             .font(.headline)
                             .foregroundStyle(.black)
@@ -78,8 +78,8 @@ struct TiboResetSignalWidgetView: View {
 
                         Button(intent: RefreshSignalIntent()) {
                             Image(systemName: "arrow.clockwise")
-                                .font(.system(size: 13, weight: .semibold))
-                                .frame(width: 30, height: 30)
+                                .font(.system(size: 12, weight: .semibold))
+                                .frame(width: 26, height: 26)
                                 .background(.quaternary, in: Circle())
                         }
                         .buttonStyle(.plain)
