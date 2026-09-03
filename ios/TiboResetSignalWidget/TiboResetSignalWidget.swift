@@ -66,31 +66,40 @@ struct TiboResetSignalWidgetView: View {
                     .offset(x: -142, y: -138)
             }
             .overlay {
-                VStack(alignment: .trailing, spacing: 7) {
-                    HStack(spacing: 6) {
-                        Spacer()
+                VStack(alignment: .leading, spacing: 7) {
+                    HStack(alignment: .top) {
+                        Text("Tibo Reset")
+                            .font(.headline)
+                            .foregroundStyle(.black)
+
+                        Spacer(minLength: 8)
 
                         Button(intent: RefreshSignalIntent()) {
                             Image(systemName: "arrow.clockwise")
-                                .font(.system(size: 10, weight: .bold))
-                                .frame(width: 24, height: 24)
-                                .background(.thinMaterial, in: Circle())
+                                .font(.system(size: 13, weight: .semibold))
+                                .frame(width: 30, height: 30)
+                                .background(.quaternary, in: Circle())
                         }
                         .buttonStyle(.plain)
-                        .tint(.secondary)
+                        .tint(.black)
                         .accessibilityLabel("리셋 신호 새로고침")
-
-                        Text("Tibo Reset")
-                            .font(.caption.weight(.bold))
-                            .foregroundStyle(.secondary)
                     }
 
                     Spacer(minLength: 0)
 
-                    Text(statusText)
-                        .font(.system(size: 15, weight: .bold, design: .rounded))
-                        .lineLimit(1)
-                        .minimumScaleFactor(0.75)
+                    HStack(alignment: .firstTextBaseline, spacing: 3) {
+                        Text(statusTitle)
+                            .font(.system(size: 15, weight: .bold, design: .rounded))
+
+                        if let scoreText {
+                            Text(scoreText)
+                                .font(.system(size: 14, weight: .bold, design: .rounded))
+                        }
+                    }
+                    .foregroundStyle(.black)
+                    .lineLimit(1)
+                    .minimumScaleFactor(0.75)
+                    .frame(maxWidth: .infinity, alignment: .leading)
 
                     LatestEvidenceView(evidence: entry.payload?.latestEvidence)
                 }
@@ -101,13 +110,16 @@ struct TiboResetSignalWidgetView: View {
             .accessibilityElement(children: .contain)
     }
 
-    private var statusText: String {
-        guard let payload = entry.payload else {
-            return SignalLevel.stale.title
-        }
+    private var statusTitle: String {
+        guard let payload = entry.payload else { return SignalLevel.stale.title }
+        return payload.effectiveLevel(now: entry.date).title
+    }
+
+    private var scoreText: String? {
+        guard let payload = entry.payload else { return nil }
         let level = payload.effectiveLevel(now: entry.date)
-        guard level != .stale else { return level.title }
-        return "\(level.title) (\(payload.signal.score)/10)"
+        guard level != .stale else { return nil }
+        return "(\(payload.signal.score)/10)"
     }
 }
 

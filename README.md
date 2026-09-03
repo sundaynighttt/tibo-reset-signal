@@ -90,7 +90,7 @@ GitHub Releases가 제공되면 다음 파일을 내려받을 수 있습니다.
 | macOS | `TiboResetSignal-macOS-<버전>.dmg` | macOS 13 이상 |
 | Windows | `TiboResetSignal-Windows-<버전>.zip` | Windows 10/11 |
 
-iPhone 앱은 Xcode로 직접 빌드할 수 있습니다. 현재 iPhone 전용 내부 베타는 TestFlight 빌드 `0.1.0 (4)`까지 배포했습니다. 홈 화면 위젯은 큰 단색 원으로 신호를 구분하고 `Tibo Reset`, 가능성 점수, 최신 판정 근거와 X 원문 링크를 함께 보여줍니다.
+iPhone 앱은 Xcode로 직접 빌드할 수 있습니다. 현재 iPhone 전용 내부 베타는 TestFlight 빌드 `0.1.0 (5)`까지 배포했습니다. 홈 화면 위젯은 큰 단색 원으로 신호를 구분하고 `Tibo Reset`, 가능성 점수, 최신 판정 근거와 X 원문 링크를 함께 보여줍니다.
 
 ## 직접 빌드
 
