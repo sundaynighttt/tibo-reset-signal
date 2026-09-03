@@ -4,6 +4,10 @@ using System.Windows.Controls;
 using System.Windows.Interop;
 using System.Windows.Media;
 using System.Windows.Shapes;
+using MediaBrushes = System.Windows.Media.Brushes;
+using MediaColor = System.Windows.Media.Color;
+using WpfButton = System.Windows.Controls.Button;
+using WpfHorizontalAlignment = System.Windows.HorizontalAlignment;
 
 namespace TiboResetSignal.WinApp;
 
@@ -39,7 +43,7 @@ public partial class DetailsWindow : Window
             RowsPanel.Children.Add(new TextBlock
             {
                 Text = "현재 활성 근거가 없습니다.",
-                Foreground = new SolidColorBrush(Color.FromRgb(185, 186, 193)),
+                Foreground = new SolidColorBrush(MediaColor.FromRgb(185, 186, 193)),
                 FontSize = 11.5,
                 Margin = new Thickness(0, 4, 0, 4)
             });
@@ -61,13 +65,13 @@ public partial class DetailsWindow : Window
 
     private void AddEvidence(SignalEvidence evidence)
     {
-        var button = new Button
+        var button = new WpfButton
         {
-            Background = new SolidColorBrush(Color.FromArgb(90, 52, 52, 57)),
+            Background = new SolidColorBrush(MediaColor.FromArgb(90, 52, 52, 57)),
             BorderThickness = new Thickness(0),
             Padding = new Thickness(10, 8, 10, 8),
             Margin = new Thickness(0, 0, 0, 6),
-            HorizontalContentAlignment = HorizontalAlignment.Stretch,
+            HorizontalContentAlignment = WpfHorizontalAlignment.Stretch,
             Cursor = System.Windows.Input.Cursors.Hand,
             ToolTip = "X에서 원문 열기"
         };
@@ -78,14 +82,14 @@ public partial class DetailsWindow : Window
         var score = new TextBlock
         {
             Text = evidence.Score.ToString(),
-            Foreground = Brushes.White,
+            Foreground = MediaBrushes.White,
             FontWeight = FontWeights.Bold,
             VerticalAlignment = VerticalAlignment.Center
         };
         var reasons = new TextBlock
         {
             Text = string.Join(" · ", evidence.ReasonCodes.Take(2).Select(SignalText.Reason)),
-            Foreground = new SolidColorBrush(Color.FromRgb(205, 206, 212)),
+            Foreground = new SolidColorBrush(MediaColor.FromRgb(205, 206, 212)),
             FontSize = 11.5,
             TextWrapping = TextWrapping.Wrap,
             VerticalAlignment = VerticalAlignment.Center
@@ -93,7 +97,7 @@ public partial class DetailsWindow : Window
         var arrow = new TextBlock
         {
             Text = "↗",
-            Foreground = new SolidColorBrush(Color.FromRgb(159, 160, 168)),
+            Foreground = new SolidColorBrush(MediaColor.FromRgb(159, 160, 168)),
             VerticalAlignment = VerticalAlignment.Center
         };
         Grid.SetColumn(reasons, 1);

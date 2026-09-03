@@ -7,8 +7,13 @@ using System.Windows.Controls;
 using System.Windows.Threading;
 using DrawingColor = System.Drawing.Color;
 using DrawingFont = System.Drawing.Font;
+using DrawingFontStyle = System.Drawing.FontStyle;
 using DrawingIcon = System.Drawing.Icon;
 using Forms = System.Windows.Forms;
+using WpfContextMenu = System.Windows.Controls.ContextMenu;
+using WpfItemCollection = System.Windows.Controls.ItemCollection;
+using WpfMenuItem = System.Windows.Controls.MenuItem;
+using WpfSeparator = System.Windows.Controls.Separator;
 
 namespace TiboResetSignal.WinApp;
 
@@ -167,22 +172,22 @@ public sealed class SignalController : IDisposable
         oldIcon?.Dispose();
     }
 
-    private ContextMenu CreateWpfContextMenu()
+    private WpfContextMenu CreateWpfContextMenu()
     {
-        var menu = new ContextMenu();
+        var menu = new WpfContextMenu();
         menu.Opened += (_, _) =>
         {
             menu.Items.Clear();
-            var refresh = new MenuItem { Header = "지금 새로고침" };
+            var refresh = new WpfMenuItem { Header = "지금 새로고침" };
             refresh.Click += async (_, _) => await RefreshAsync();
             menu.Items.Add(refresh);
-            menu.Items.Add(new Separator());
+            menu.Items.Add(new WpfSeparator());
             AddModeItems(menu.Items);
-            menu.Items.Add(new Separator());
-            var profile = new MenuItem { Header = "@thsottiaux 프로필 열기" };
+            menu.Items.Add(new WpfSeparator());
+            var profile = new WpfMenuItem { Header = "@thsottiaux 프로필 열기" };
             profile.Click += (_, _) => OpenUrl("https://x.com/thsottiaux");
             menu.Items.Add(profile);
-            var startup = new MenuItem
+            var startup = new WpfMenuItem
             {
                 Header = "로그인 시 자동 실행",
                 IsCheckable = true,
@@ -190,16 +195,16 @@ public sealed class SignalController : IDisposable
             };
             startup.Click += (_, _) => StartupManager.IsEnabled = !StartupManager.IsEnabled;
             menu.Items.Add(startup);
-            var exit = new MenuItem { Header = "종료" };
+            var exit = new WpfMenuItem { Header = "종료" };
             exit.Click += (_, _) => System.Windows.Application.Current.Shutdown();
             menu.Items.Add(exit);
         };
         return menu;
     }
 
-    private void AddModeItems(ItemCollection items)
+    private void AddModeItems(WpfItemCollection items)
     {
-        var taskbar = new MenuItem
+        var taskbar = new WpfMenuItem
         {
             Header = "작업표시줄 라벨",
             IsCheckable = true,
@@ -207,7 +212,7 @@ public sealed class SignalController : IDisposable
         };
         taskbar.Click += (_, _) => SwitchMode(DisplayMode.TaskbarLabel);
         items.Add(taskbar);
-        var floating = new MenuItem
+        var floating = new WpfMenuItem
         {
             Header = "우상단 미니 위젯",
             IsCheckable = true,
@@ -263,7 +268,7 @@ public sealed class SignalController : IDisposable
         using var background = new SolidBrush(DrawingColor.FromArgb(mediaColor.R, mediaColor.G, mediaColor.B));
         graphics.FillEllipse(background, 1, 1, 30, 30);
         var text = score?.ToString() ?? "?";
-        using var font = new DrawingFont("Segoe UI", 12f, FontStyle.Bold, GraphicsUnit.Pixel);
+        using var font = new DrawingFont("Segoe UI", 12f, DrawingFontStyle.Bold, GraphicsUnit.Pixel);
         using var format = new StringFormat { Alignment = StringAlignment.Center, LineAlignment = StringAlignment.Center };
         graphics.DrawString(text, font, Brushes.White, new RectangleF(0, 0, 32, 31), format);
         var handle = bitmap.GetHicon();
