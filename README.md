@@ -2,6 +2,8 @@
 
 Tibo Reset Signal은 [@thsottiaux](https://x.com/thsottiaux)의 공개 포스트에서 Codex 사용량 리셋 정황을 찾아 신호등으로 보여주는 무료 오픈소스 앱입니다.
 
+> **리셋 버튼은 티보의 손에. 새로고침 노동은 GitHub Actions에게. 우리는 신호등만 보면 됩니다.**
+
 ## 왜 만들었나
 
 Codex를 집중적으로 쓰는 Pro 사용자에게 사용량 리셋은 단순한 알림이 아니라 작업 계획과 직결되는 정보입니다. 무거운 작업을 지금 시작할지, 다음 리셋까지 아껴 쓸지 판단하려면 리셋 가능성을 계속 확인하게 됩니다.
@@ -20,6 +22,18 @@ Codex를 집중적으로 쓰는 Pro 사용자에게 사용량 리셋은 단순�
 - **개인정보 보호:** 광고, 분석, 텔레메트리가 없으며 최종 사용자의 계정 정보를 수집하지 않고 X 포스트 원문도 공개 JSON에 저장하지 않습니다.
 
 > 이 프로젝트는 X, OpenAI 또는 Tibo의 공식 제품이 아닙니다. 신호는 공개 포스트를 기반으로 한 규칙 기반 추정이며 실제 리셋을 보장하지 않습니다.
+
+## 작은 신호등, 꽤 진지한 설계
+
+화면에는 신호등 하나가 보이지만, 그 뒤에서는 몇 가지 현실적인 제품 문제를 함께 풀었습니다.
+
+- **불안정한 외부 데이터:** 공식 X API를 우선 사용하고, 실패하면 검증된 공개 피드로 순차 전환합니다.
+- **그럴듯한 말과 실제 신호의 구분:** 단순 키워드 검색 대신 시간, 실행 확정 표현, 사용량 문맥과 부정 표현을 조합한 규칙 엔진으로 점수를 계산합니다.
+- **세 플랫폼, 하나의 판단:** GitHub Pages의 작은 JSON 하나를 계약으로 삼아 macOS, Windows, iPhone이 같은 신호와 근거를 보여줍니다.
+- **운영 실패를 거짓 정상으로 보이지 않기:** 마지막 정상 값을 보존하되, 수집이 오래 멈추면 별도의 `Stale` 상태로 전환합니다.
+- **공짜 앱의 유료 API 비용:** 사용자에게 키를 요구하지 않으면서도 운영자가 비용 소진을 놓치지 않도록 추정 장부와 실제 잔액 확인 경로를 함께 제공합니다.
+
+즉, “트윗을 읽어 색깔을 바꾸는 앱”이라기보다 **외부 신호 수집 → 설명 가능한 판정 → 안전한 공개 배포 → 여러 네이티브 표면**을 작게 끝까지 연결한 프로젝트입니다.
 
 ## 신호 의미
 
@@ -45,13 +59,23 @@ GitHub Actions (매시간 17분)
 
 앱에는 API 키가 포함되지 않습니다. 프로젝트 운영자의 X API 키가 있으면 GitHub Actions Secret에만 저장됩니다. 키가 없거나 공식 API가 일시 실패하면 수집기는 `codex-reset.com` 공개 Feed, Dayclaw 공개 Source 순서로 전환합니다. 각 폴백은 대상 계정, 작성자, Post ID, 정식 X 링크와 stale 상태를 검증합니다. 수집 중 포스트 텍스트는 점수 계산에만 사용하고 공개 JSON에는 저장하지 않습니다. 공개 데이터에는 계산된 상태, 점수, 판정 이유 코드, Post ID와 X 원문 링크만 포함됩니다.
 
-X의 공개 잔액 API가 현재 계정에서 동작하지 않으므로 크레딧은 로컬 계량 추정치로 표시합니다. 운영자가 등록한 시작 잔액에서 공식 X API가 실제 반환한 새 Post당 `$0.005`, 캐시되지 않은 사용자 조회당 `$0.01`을 차감합니다. 새 Post가 없으면 Post 비용도 차감하지 않습니다. 기본 기준은 추정 잔액 `$1` 미만이면 `낮음`, `$0`이면 `소진`입니다. 이 값은 공식 청구 잔액이 아니며, 각 앱 상세 화면 하단의 **X Developer Console** 링크에서 실제 금액을 확인해야 합니다.
+## API 잔액 문제를 어떻게 풀었나
 
-공개 JSON에는 추정 잔액과 추정 기준 버전만 포함되며 API 키, 결제정보, Developer Console 응답은 포함되지 않습니다. X의 단가 변경, 다른 곳에서 같은 앱 키 사용, 크레딧 추가 구매가 있으면 추정치와 실제 잔액이 달라질 수 있습니다.
+처음에는 X API의 실제 잔액을 앱에 그대로 보여주려 했습니다. 하지만 운영자 인증으로 사용할 수 있는 공개 잔액 엔드포인트가 이 계정에서 정상적인 잔액을 반환하지 않았고, Developer Console 내부 요청은 로그인 쿠키에 묶여 있었습니다. 이 요청을 억지로 재사용하면 공개 앱에 계정 쿠키나 추가 인증 절차가 필요해집니다. 잔액 한 줄을 얻자고 보안 모델 전체를 망칠 수는 없었습니다.
+
+그래서 **정확한 척하지 않는 로컬 비용 장부**로 방향을 바꿨습니다.
+
+1. 운영자가 Developer Console에서 확인한 실제 금액을 GitHub 저장소 변수에 시작 잔액으로 등록합니다.
+2. 수집기는 `since_id` 이후의 새 Post만 요청하고, 성공 응답에서 실제 반환된 리소스 수만 기록합니다.
+3. 시작 잔액에서 [현재 X 공식 단가](https://docs.x.com/x-api/getting-started/pricing)에 따라 새 Post당 `$0.005`, 캐시되지 않은 사용자 조회당 `$0.01`을 차감합니다. 새 Post가 없으면 Post 비용도 차감하지 않습니다.
+4. 공개 JSON에는 API 키나 결제정보 대신 추정 잔액, `충분 / 낮음 / 소진` 상태와 계산 기준 버전만 담습니다.
+5. 모든 앱 하단에는 [**X Developer Console**](https://console.x.com/) 링크를 두어 실제 잔액이 필요할 때 바로 교차 확인할 수 있게 했습니다.
+
+기본 기준은 추정 잔액 `$1` 미만이면 `낮음`, `$0`이면 `소진`입니다. 단가가 바뀌거나 같은 API 키를 다른 곳에서도 사용하면 실제 잔액과 차이가 날 수 있으므로 화면에도 반드시 `약 $9.99`처럼 표시합니다. 크레딧을 추가 구매하면 시작 잔액과 계산 기준 버전을 함께 갱신해 장부를 다시 맞춥니다.
 
 공개 피드는 편의를 위한 최선 노력 폴백이며 서비스 지속성을 보장하지 않습니다. 모든 공급자가 실패하면 마지막 정상 신호를 보존하고 수집 상태를 오류로 표시합니다. 앱은 오래된 상태를 Red가 아닌 Stale로 보여줍니다.
 
-공개 상태: `https://sundaynighttt.github.io/tibo-reset-signal/latest.json`
+공개 상태: [latest.json](https://sundaynighttt.github.io/tibo-reset-signal/latest.json)
 
 ## 설치
 
@@ -153,6 +177,8 @@ schema/     공개 JSON 계약
 Tibo Reset Signal is a free, open-source native utility for macOS, Windows, and iPhone. Heavy Codex Pro users often plan expensive work around usage resets, while the earliest clues tend to appear in @thsottiaux's public posts. The app turns those clues into an always-visible traffic light, explains the evidence behind the score, and links back to the original post.
 
 It checks for new posts hourly, distinguishes stale data from a genuine Red signal, and requires no API key, X login, cookie, or self-hosted service from end users. Its scoring rules are public, and the apps also show an approximate operator API credit status with a link to verify the actual balance in X Developer Console.
+
+When a reliable public credit-balance response was not available for the operator account, the project deliberately avoided scraping the cookie-bound Developer Console. Instead, it keeps a transparent local cost ledger: an operator-provided baseline minus successfully returned billable resources. Only the estimate and health state are published; credentials and billing data stay private, while the actual balance remains one click away in the console.
 
 This project is unofficial and does not guarantee that a reset will occur.
 
