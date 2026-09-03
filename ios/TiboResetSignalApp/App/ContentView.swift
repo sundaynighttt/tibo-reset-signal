@@ -10,6 +10,7 @@ struct ContentView: View {
                 VStack(spacing: 18) {
                     if let payload = model.payload {
                         SignalHeroCard(payload: payload)
+                        APICreditCard(status: payload.apiCredits?.status ?? .unknown)
                         evidenceSection(payload.evidence)
                     } else if let error = model.errorMessage {
                         ContentUnavailableView(
@@ -82,6 +83,25 @@ struct ContentView: View {
     }
 }
 
+private struct APICreditCard: View {
+    let status: APICreditStatus
+
+    var body: some View {
+        HStack {
+            Label("API 크레딧", systemImage: "creditcard")
+                .font(.subheadline.weight(.semibold))
+            Spacer()
+            Text(status.title)
+                .font(.subheadline.weight(.semibold))
+                .foregroundStyle(status == .exhausted ? .red : .secondary)
+        }
+        .padding(16)
+        .background(.background, in: RoundedRectangle(cornerRadius: 16))
+        .accessibilityElement(children: .ignore)
+        .accessibilityLabel("API 크레딧: \(status.title)")
+    }
+}
+
 private struct SignalHeroCard: View {
     let payload: SignalPayload
 
@@ -148,4 +168,15 @@ private struct EvidenceRow: View {
         model: AppModel(initialPayload: .placeholder),
         loadsOnAppear: false
     )
+}
+
+#Preview("API 크레딧 상태") {
+    VStack(spacing: 12) {
+        APICreditCard(status: .sufficient)
+        APICreditCard(status: .low)
+        APICreditCard(status: .exhausted)
+        APICreditCard(status: .unknown)
+    }
+    .padding()
+    .background(Color(.systemGroupedBackground))
 }

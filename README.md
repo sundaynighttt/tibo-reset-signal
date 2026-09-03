@@ -5,6 +5,7 @@ Tibo Reset Signal은 [@thsottiaux](https://x.com/thsottiaux)의 공개 포스트
 - **macOS:** 메뉴바에 `🔴/🟡/🟢 Reset 점수` 표시
 - **Windows:** 작업표시줄 또는 우상단 미니 위젯과 시스템 트레이 표시
 - **iPhone:** 홈 화면 소형 위젯과 근거 확인 앱
+- **운영 상태:** 앱 상세 화면에서 X API 크레딧을 `충분 / 낮음 / 소진`으로 표시
 - 사용자 API 키, X 로그인, 쿠키, 셀프호스팅 불필요
 - 광고, 분석, 텔레메트리 없음
 
@@ -33,6 +34,8 @@ GitHub Actions (매시간 17분)
 ```
 
 앱에는 API 키가 포함되지 않습니다. 프로젝트 운영자의 X API 키가 있으면 GitHub Actions Secret에만 저장됩니다. 키가 없거나 공식 API가 일시 실패하면 수집기는 `codex-reset.com` 공개 Feed, Dayclaw 공개 Source 순서로 전환합니다. 각 폴백은 대상 계정, 작성자, Post ID, 정식 X 링크와 stale 상태를 검증합니다. 수집 중 포스트 텍스트는 점수 계산에만 사용하고 공개 JSON에는 저장하지 않습니다. 공개 데이터에는 계산된 상태, 점수, 판정 이유 코드, Post ID와 X 원문 링크만 포함됩니다.
+
+X API 토큰이 설정된 경우 수집기는 공식 크레딧 조회 결과를 정확한 금액 없이 `sufficient`, `low`, `exhausted` 중 하나로 변환합니다. 기본 기준은 `$1` 미만이면 `낮음`, `$0`이면 `소진`이며, 조회할 수 없으면 `확인 불가`로 표시합니다. 공개 JSON과 저장소에는 실제 잔액을 기록하지 않습니다.
 
 공개 피드는 편의를 위한 최선 노력 폴백이며 서비스 지속성을 보장하지 않습니다. 모든 공급자가 실패하면 마지막 정상 신호를 보존하고 수집 상태를 오류로 표시합니다. 앱은 오래된 상태를 Red가 아닌 Stale로 보여줍니다.
 
@@ -119,6 +122,7 @@ schema/     공개 JSON 계약
 2. `Collect and publish signal` 워크플로를 수동 실행해 공개 피드 기반 첫 정상 JSON을 발행합니다.
 3. 독립성과 안정성을 높이려면 저장소 Secret `X_BEARER_TOKEN`을 등록합니다. 등록 즉시 공식 X API가 우선 사용됩니다.
 4. 필요하면 저장소 Variable `TARGET_USER_ID`를 등록해 사용자 조회 호출을 생략합니다.
+5. `낮음` 기준을 바꾸려면 저장소 Variable `X_CREDIT_LOW_USD`에 양수 USD 금액을 설정합니다. 기본값은 `1.0`입니다.
 
 포크 저장소도 Secret 없이 공개 피드 폴백으로 동작하며 원본 프로젝트의 API 키를 상속하지 않습니다. 운영자는 `--source x-api`, `--source codex-reset`, `--source dayclaw`로 특정 공급자를 진단할 수 있습니다.
 
@@ -127,6 +131,7 @@ schema/     공개 JSON 계약
 - 앱은 사용자 계정이나 X 쿠키를 읽지 않습니다.
 - 앱은 공개 GitHub Pages JSON 이외의 데이터를 전송하지 않습니다.
 - Actions Secret은 앱·빌드 산출물·공개 JSON에 포함되지 않습니다.
+- X API의 정확한 잔액은 저장하지 않고 `충분 / 낮음 / 소진 / 확인 불가` 상태만 공개합니다.
 - 민감정보는 이슈나 로그에 첨부하지 마세요. 보안 문제는 [SECURITY.md](SECURITY.md)를 참고하세요.
 
 ## English

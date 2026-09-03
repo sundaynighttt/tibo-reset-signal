@@ -44,6 +44,27 @@ struct SignalSource: Codable, Equatable {
     let message: String?
 }
 
+enum APICreditStatus: String, Codable, Equatable {
+    case sufficient
+    case low
+    case exhausted
+    case unknown
+
+    var localizedName: String {
+        switch self {
+        case .sufficient: "충분"
+        case .low: "낮음"
+        case .exhausted: "소진"
+        case .unknown: "확인 불가"
+        }
+    }
+}
+
+struct APICredits: Codable, Equatable {
+    let status: APICreditStatus
+    let checkedAt: Date?
+}
+
 struct SignalEvidence: Codable, Equatable, Identifiable {
     let postId: String
     let url: URL
@@ -60,6 +81,7 @@ struct SignalPayload: Codable, Equatable {
     let target: SignalTarget
     let signal: SignalSummary
     let source: SignalSource
+    let apiCredits: APICredits?
     let lastSeenPostId: String?
     let evidence: [SignalEvidence]
 

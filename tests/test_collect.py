@@ -5,11 +5,52 @@ from unittest.mock import patch
 
 from collector.collect import (
     SourceResult,
+    api_credit_status,
     build_evidence,
     collect_live_source,
+    fetch_api_credit_status,
     normalize_codex_reset_feed,
     normalize_dayclaw_feed,
 )
+
+
+class ApiCreditTests(unittest.TestCase):
+    def test_maps_balance_to_public_status_without_exposing_amount(self) -> None:
+        self.assertEqual(api_credit_status(0, 1.0), "exhausted")
+        self.assertEqual(api_credit_status("0.75", 1.0), "low")
+        self.assertEqual(api_credit_status(1, 1.0), "sufficient")
+
+    @patch("collector.collect.request_json")
+    def test_credit_payload_contains_status_only(self, request_json) -> None:
+        request_json.return_value = {
+            "data": {
+                "total_balance": 8.42,
+                "prepaid_balance": 7.2,
+                "free_balance": 1.22,
+            }
+        }
+
+        payload = fetch_api_credit_status(
+            "test-token",
+            datetime(2026, 9, 3, tzinfo=timezone.utc),
+        )
+
+        self.assertEqual(
+            payload,
+            {"status": "sufficient", "checkedAt": "2026-09-03T00:00:00Z"},
+        )
+        self.assertNotIn("balance", payload)
+
+    @patch("collector.collect.request_json")
+    def test_credit_lookup_failure_is_unknown(self, request_json) -> None:
+        request_json.side_effect = RuntimeError("temporary failure")
+
+        payload = fetch_api_credit_status(
+            "test-token",
+            datetime(2026, 9, 3, tzinfo=timezone.utc),
+        )
+
+        self.assertEqual(payload["status"], "unknown")
 
 
 class PublicFeedTests(unittest.TestCase):

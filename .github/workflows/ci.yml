@@ -30,6 +30,8 @@ jobs:
           assert payload['signal']['level'] == 'green'
           assert payload['source']['provider'] == 'fixture'
           assert payload['source']['isFallback'] is False
+          assert payload['apiCredits'] == {'status': 'unknown', 'checkedAt': None}
+          assert 'balance' not in payload['apiCredits']
           assert payload['evidence']
           assert all('text' not in item for item in payload['evidence'])
           PY

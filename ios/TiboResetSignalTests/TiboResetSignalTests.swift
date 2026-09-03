@@ -14,10 +14,12 @@ final class TiboResetSignalTests: XCTestCase {
                 lastSuccessfulCheckAt: now,
                 message: nil
             ),
+            apiCredits: APICredits(status: .sufficient, checkedAt: now),
             lastSeenPostId: "1",
             evidence: []
         )
         XCTAssertEqual(payload.effectiveLevel(now: now), .green)
+        XCTAssertEqual(payload.apiCredits?.status.title, "충분")
     }
 
     func testFailedSourceIsStale() {
@@ -32,6 +34,7 @@ final class TiboResetSignalTests: XCTestCase {
                 lastSuccessfulCheckAt: now,
                 message: "temporary"
             ),
+            apiCredits: nil,
             lastSeenPostId: nil,
             evidence: []
         )

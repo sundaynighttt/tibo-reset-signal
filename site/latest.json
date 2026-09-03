@@ -16,6 +16,10 @@
     "checkedAt": null,
     "lastSuccessfulCheckAt": null
   },
+  "apiCredits": {
+    "status": "unknown",
+    "checkedAt": null
+  },
   "lastSeenPostId": null,
   "evidence": []
 }

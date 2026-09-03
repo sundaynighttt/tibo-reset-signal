@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import math
 import os
 import sys
 import urllib.error
@@ -20,6 +21,7 @@ DEFAULT_OUTPUT = Path("site/latest.json")
 X_API_BASE = "https://api.x.com/2"
 CODEX_RESET_FEED_URL = "https://codex-reset.com/api/feed"
 DAYCLAW_ITEMS_BASE_URL = "https://api.dayclaw.com/api/source/public/x"
+DEFAULT_LOW_CREDIT_USD = 1.0
 
 
 @dataclass(frozen=True)
@@ -120,6 +122,41 @@ def fetch_posts(
     url = f"{X_API_BASE}/users/{urllib.parse.quote(user_id)}/tweets?{urllib.parse.urlencode(query)}"
     payload = request_json(url, token, "X API")
     return list(payload.get("data") or [])
+
+
+def api_credit_status(total_balance: Any, low_threshold: float) -> str:
+    if isinstance(total_balance, bool):
+        raise RuntimeError("X API returned an invalid credit balance")
+    try:
+        balance = float(total_balance)
+    except (TypeError, ValueError) as error:
+        raise RuntimeError("X API did not return a credit balance") from error
+    if not math.isfinite(balance):
+        raise RuntimeError("X API returned an invalid credit balance")
+    if balance <= 0:
+        return "exhausted"
+    if balance < low_threshold:
+        return "low"
+    return "sufficient"
+
+
+def fetch_api_credit_status(
+    token: str,
+    now: datetime,
+    low_threshold: float = DEFAULT_LOW_CREDIT_USD,
+) -> dict[str, Any]:
+    checked_at = isoformat(now)
+    if not token:
+        return {"status": "unknown", "checkedAt": None}
+    try:
+        payload = request_json(f"{X_API_BASE}/usage/credits", token, "X API credits")
+        total_balance = (payload.get("data") or {}).get("total_balance")
+        return {
+            "status": api_credit_status(total_balance, low_threshold),
+            "checkedAt": checked_at,
+        }
+    except Exception:
+        return {"status": "unknown", "checkedAt": checked_at}
 
 
 def is_canonical_post_url(url: str, username: str, post_id: str) -> bool:
@@ -393,6 +430,20 @@ def collect(args: argparse.Namespace) -> int:
     previous = load_previous(previous_path)
     previous_id = previous.get("lastSeenPostId")
     username = args.username
+    token = (os.environ.get("X_BEARER_TOKEN") or "").strip()
+    try:
+        low_credit_usd = float(
+            os.environ.get("X_CREDIT_LOW_USD", str(DEFAULT_LOW_CREDIT_USD))
+        )
+        if not math.isfinite(low_credit_usd) or low_credit_usd <= 0:
+            raise ValueError
+    except ValueError:
+        low_credit_usd = DEFAULT_LOW_CREDIT_USD
+    api_credits = (
+        {"status": "unknown", "checkedAt": None}
+        if args.fixture
+        else fetch_api_credit_status(token, now, low_credit_usd)
+    )
 
     try:
         if args.fixture:
@@ -424,6 +475,7 @@ def collect(args: argparse.Namespace) -> int:
             "target": {"username": username, "userId": user_id},
             "signal": compute_signal(evidence),
             "source": source_payload,
+            "apiCredits": api_credits,
             "lastSeenPostId": newest_post_id(posts, str(previous_id) if previous_id else None),
             "evidence": evidence,
         }
@@ -447,6 +499,7 @@ def collect(args: argparse.Namespace) -> int:
                 "lastSuccessfulCheckAt": previous_source.get("lastSuccessfulCheckAt"),
                 "message": str(error)[:240],
             },
+            "apiCredits": api_credits,
             "lastSeenPostId": previous_id,
             "evidence": previous.get("evidence") or [],
         }

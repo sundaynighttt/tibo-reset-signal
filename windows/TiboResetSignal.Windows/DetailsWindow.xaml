@@ -18,6 +18,7 @@
                 <RowDefinition Height="Auto" />
                 <RowDefinition Height="Auto" />
                 <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
             </Grid.RowDefinitions>
             <Grid Grid.Row="0">
                 <Grid.ColumnDefinitions>
@@ -43,8 +44,20 @@
                 <TextBlock x:Name="ScoreText" Text="–" Margin="38,-2,0,0"
                            Foreground="#B9BAC1" FontSize="12" />
             </StackPanel>
-            <StackPanel x:Name="RowsPanel" Grid.Row="2" />
-            <TextBlock x:Name="UpdatedText" Grid.Row="3" Margin="0,12,0,0" Padding="0,10,0,0"
+            <Border Grid.Row="2" Margin="0,0,0,12" Padding="11,9" CornerRadius="10"
+                    Background="#58343439">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="Auto" />
+                    </Grid.ColumnDefinitions>
+                    <TextBlock Text="API 크레딧" Foreground="#D5D6DB" FontSize="11.5" FontWeight="SemiBold" />
+                    <TextBlock x:Name="CreditText" Grid.Column="1" Text="확인 불가"
+                               Foreground="#B9BAC1" FontSize="11.5" FontWeight="SemiBold" />
+                </Grid>
+            </Border>
+            <StackPanel x:Name="RowsPanel" Grid.Row="3" />
+            <TextBlock x:Name="UpdatedText" Grid.Row="4" Margin="0,12,0,0" Padding="0,10,0,0"
                        Foreground="#777982" FontSize="10.5" />
         </Grid>
     </Border>
