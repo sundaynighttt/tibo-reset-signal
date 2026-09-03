@@ -33,6 +33,10 @@ public partial class DetailsWindow : Window
         MainStatusText.Text = SignalText.KoreanLevelName(level);
         ScoreText.Text = level == SignalLevel.Stale ? "점수 –" : $"점수 {payload!.Signal.Score} / 10";
         StatusText.Text = error is null ? "@thsottiaux 공개 신호" : "마지막 값 표시 중 · 새로고침 실패";
+        CreditText.Text = SignalText.ApiCreditName(payload?.ApiCredits?.Status);
+        CreditText.Foreground = payload?.ApiCredits?.Status == ApiCreditStatus.Exhausted
+            ? new SolidColorBrush(MediaColor.FromRgb(242, 95, 92))
+            : new SolidColorBrush(MediaColor.FromRgb(185, 186, 193));
 
         if (payload?.Evidence.Count > 0)
         {

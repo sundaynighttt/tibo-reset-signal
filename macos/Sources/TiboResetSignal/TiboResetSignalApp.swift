@@ -112,8 +112,10 @@ final class TiboResetSignalApp: NSObject, NSApplicationDelegate, NSMenuDelegate 
         if let payload = store.payload {
             addInfo("점수 \(payload.signal.score) / 10")
             addInfo(SignalFormatter.relativeUpdate(payload.source.lastSuccessfulCheckAt, now: store.now))
+            addInfo("API 크레딧: \(payload.apiCredits?.status.localizedName ?? "확인 불가")")
         } else {
             addInfo("공개 신호 확인 중…")
+            addInfo("API 크레딧: 확인 불가")
         }
         if let errorMessage = store.errorMessage { addInfo(errorMessage) }
         if let loginItemError { addInfo(loginItemError) }

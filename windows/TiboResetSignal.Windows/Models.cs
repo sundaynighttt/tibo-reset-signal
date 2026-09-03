@@ -18,6 +18,14 @@ public sealed record SignalSource(
     DateTimeOffset? CheckedAt,
     DateTimeOffset? LastSuccessfulCheckAt,
     string? Message);
+public enum ApiCreditStatus
+{
+    Sufficient,
+    Low,
+    Exhausted,
+    Unknown
+}
+public sealed record ApiCredits(ApiCreditStatus Status, DateTimeOffset? CheckedAt);
 public sealed record SignalEvidence(
     string PostId,
     Uri Url,
@@ -31,6 +39,7 @@ public sealed record SignalPayload(
     SignalTarget Target,
     SignalSummary Signal,
     SignalSource Source,
+    ApiCredits? ApiCredits,
     string? LastSeenPostId,
     IReadOnlyList<SignalEvidence> Evidence)
 {
@@ -87,6 +96,14 @@ internal static class SignalText
         _ => code.Replace('_', ' ')
     };
 
+    internal static string ApiCreditName(ApiCreditStatus? status) => status switch
+    {
+        ApiCreditStatus.Sufficient => "충분",
+        ApiCreditStatus.Low => "낮음",
+        ApiCreditStatus.Exhausted => "소진",
+        _ => "확인 불가"
+    };
+
     internal static string UpdateText(DateTimeOffset? date)
     {
         if (date is null) return "정상 확인 기록 없음";
@@ -111,6 +128,7 @@ internal static class SignalModelSelfTest
             "checkedAt": "2099-01-01T00:00:00Z",
             "lastSuccessfulCheckAt": "2099-01-01T00:00:00Z"
           },
+          "apiCredits": {"status": "sufficient", "checkedAt": "2099-01-01T00:00:00Z"},
           "lastSeenPostId": "1",
           "evidence": []
         }
@@ -118,6 +136,7 @@ internal static class SignalModelSelfTest
         var payload = JsonSerializer.Deserialize<SignalPayload>(json, SignalJson.Options)
                       ?? throw new InvalidOperationException("Payload did not decode.");
         if (payload.SchemaVersion != 1 || payload.Signal.Score != 9 ||
+            payload.ApiCredits?.Status != ApiCreditStatus.Sufficient ||
             payload.EffectiveLevel(new DateTimeOffset(2099, 1, 1, 0, 30, 0, TimeSpan.Zero)) != SignalLevel.Green)
         {
             throw new InvalidOperationException("Signal model self-test failed.");

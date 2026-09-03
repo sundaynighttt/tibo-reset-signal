@@ -39,6 +39,7 @@ jobs:
         continue-on-error: true
         env:
           X_BEARER_TOKEN: ${{ secrets.X_BEARER_TOKEN }}
+          X_CREDIT_LOW_USD: ${{ vars.X_CREDIT_LOW_USD }}
           TARGET_USER_ID: ${{ vars.TARGET_USER_ID }}
         run: >-
           python -m collector.collect

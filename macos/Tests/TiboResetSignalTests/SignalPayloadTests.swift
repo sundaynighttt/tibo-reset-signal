@@ -15,6 +15,7 @@ final class SignalPayloadTests: XCTestCase {
             "checkedAt": "\(ISO8601DateFormatter().string(from: now))",
             "lastSuccessfulCheckAt": "\(ISO8601DateFormatter().string(from: now))"
           },
+          "apiCredits": {"status": "sufficient", "checkedAt": "\(ISO8601DateFormatter().string(from: now))"},
           "lastSeenPostId": "10",
           "evidence": []
         }
@@ -22,6 +23,7 @@ final class SignalPayloadTests: XCTestCase {
         let payload = try SignalCoding.decoder().decode(SignalPayload.self, from: Data(json.utf8))
         XCTAssertEqual(payload.effectiveLevel(now: now), .green)
         XCTAssertEqual(SignalFormatter.menuTitle(payload: payload, now: now), "🟢 Reset 9")
+        XCTAssertEqual(payload.apiCredits?.status.localizedName, "충분")
     }
 
     func testOldPayloadIsStale() throws {
@@ -36,6 +38,7 @@ final class SignalPayloadTests: XCTestCase {
                 lastSuccessfulCheckAt: checked,
                 message: nil
             ),
+            apiCredits: nil,
             lastSeenPostId: nil,
             evidence: []
         )

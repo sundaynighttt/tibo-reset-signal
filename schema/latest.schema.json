@@ -28,10 +28,24 @@
       "required": ["status", "checkedAt", "lastSuccessfulCheckAt"],
       "properties": {
         "status": { "enum": ["pending", "ok", "error"] },
+        "provider": {
+          "type": ["string", "null"],
+          "enum": ["fixture", "x_api", "codex_reset_feed", "dayclaw", null]
+        },
+        "isFallback": { "type": "boolean" },
         "checkedAt": { "type": ["string", "null"], "format": "date-time" },
         "lastSuccessfulCheckAt": { "type": ["string", "null"], "format": "date-time" },
         "message": { "type": "string" }
       }
+    },
+    "apiCredits": {
+      "type": "object",
+      "required": ["status", "checkedAt"],
+      "properties": {
+        "status": { "enum": ["sufficient", "low", "exhausted", "unknown"] },
+        "checkedAt": { "type": ["string", "null"], "format": "date-time" }
+      },
+      "additionalProperties": false
     },
     "lastSeenPostId": { "type": ["string", "null"] },
     "evidence": {
