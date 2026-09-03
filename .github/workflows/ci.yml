@@ -28,6 +28,8 @@ jobs:
           payload = json.load(open('/tmp/latest.json', encoding='utf-8'))
           assert payload['schemaVersion'] == 1
           assert payload['signal']['level'] == 'green'
+          assert payload['source']['provider'] == 'fixture'
+          assert payload['source']['isFallback'] is False
           assert payload['evidence']
           assert all('text' not in item for item in payload['evidence'])
           PY

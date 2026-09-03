@@ -25,13 +25,16 @@ Tibo Reset Signal은 [@thsottiaux](https://x.com/thsottiaux)의 공개 포스트
 
 ```text
 GitHub Actions (매시간 17분)
-  → X API로 @thsottiaux 새 포스트 확인
+  → 공식 X API로 @thsottiaux 새 포스트 확인
+  → API가 없거나 실패하면 검증된 공개 피드 순차 사용
   → 공개 규칙으로 점수 계산
   → GitHub Pages에 latest.json 배포
   → macOS / Windows / iPhone 앱이 같은 JSON 조회
 ```
 
-앱에는 API 키가 포함되지 않습니다. 프로젝트 운영자의 X API 키는 GitHub Actions Secret에만 저장됩니다. 수집 중 포스트 텍스트는 점수 계산에만 사용하고 공개 JSON에는 저장하지 않습니다. 공개 데이터에는 계산된 상태, 점수, 판정 이유 코드, Post ID와 X 원문 링크만 포함됩니다.
+앱에는 API 키가 포함되지 않습니다. 프로젝트 운영자의 X API 키가 있으면 GitHub Actions Secret에만 저장됩니다. 키가 없거나 공식 API가 일시 실패하면 수집기는 `codex-reset.com` 공개 Feed, Dayclaw 공개 Source 순서로 전환합니다. 각 폴백은 대상 계정, 작성자, Post ID, 정식 X 링크와 stale 상태를 검증합니다. 수집 중 포스트 텍스트는 점수 계산에만 사용하고 공개 JSON에는 저장하지 않습니다. 공개 데이터에는 계산된 상태, 점수, 판정 이유 코드, Post ID와 X 원문 링크만 포함됩니다.
+
+공개 피드는 편의를 위한 최선 노력 폴백이며 서비스 지속성을 보장하지 않습니다. 모든 공급자가 실패하면 마지막 정상 신호를 보존하고 수집 상태를 오류로 표시합니다. 앱은 오래된 상태를 Red가 아닌 Stale로 보여줍니다.
 
 공개 상태: `https://sundaynighttt.github.io/tibo-reset-signal/latest.json`
 
@@ -77,7 +80,7 @@ python3 -m unittest discover -s tests
 python3 -m collector.collect --fixture tests/fixtures/posts.json --output /tmp/latest.json
 ```
 
-실제 X API 호출에는 프로젝트 운영 환경의 `X_BEARER_TOKEN`이 필요합니다. 최종 사용자는 이 값을 설정하지 않습니다.
+수집기는 기본 `auto` 모드에서 별도 설정 없이 공개 피드로 동작합니다. 프로젝트 운영 환경에 `X_BEARER_TOKEN`을 등록하면 공식 X API가 최우선 소스가 됩니다. 최종 사용자는 어떤 경우에도 이 값을 설정하지 않습니다.
 
 ## 점수 규칙
 
@@ -112,12 +115,12 @@ schema/     공개 JSON 계약
 
 ## 운영자 설정
 
-1. 저장소 Secret `X_BEARER_TOKEN`을 등록합니다.
-2. 필요하면 저장소 Variable `TARGET_USER_ID`를 등록해 사용자 조회 호출을 생략합니다.
-3. GitHub Pages Source를 **GitHub Actions**로 설정합니다.
-4. `Collect and publish signal` 워크플로를 수동 실행해 첫 정상 JSON을 발행합니다.
+1. GitHub Pages Source를 **GitHub Actions**로 설정합니다.
+2. `Collect and publish signal` 워크플로를 수동 실행해 공개 피드 기반 첫 정상 JSON을 발행합니다.
+3. 독립성과 안정성을 높이려면 저장소 Secret `X_BEARER_TOKEN`을 등록합니다. 등록 즉시 공식 X API가 우선 사용됩니다.
+4. 필요하면 저장소 Variable `TARGET_USER_ID`를 등록해 사용자 조회 호출을 생략합니다.
 
-포크 저장소는 Secret이 없으면 stale 상태만 발행하며 원본 프로젝트의 API 키를 상속하지 않습니다.
+포크 저장소도 Secret 없이 공개 피드 폴백으로 동작하며 원본 프로젝트의 API 키를 상속하지 않습니다. 운영자는 `--source x-api`, `--source codex-reset`, `--source dayclaw`로 특정 공급자를 진단할 수 있습니다.
 
 ## 개인정보와 보안
 

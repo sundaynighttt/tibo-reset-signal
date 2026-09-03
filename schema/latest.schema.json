@@ -28,6 +28,11 @@
       "required": ["status", "checkedAt", "lastSuccessfulCheckAt"],
       "properties": {
         "status": { "enum": ["pending", "ok", "error"] },
+        "provider": {
+          "type": ["string", "null"],
+          "enum": ["fixture", "x_api", "codex_reset_feed", "dayclaw", null]
+        },
+        "isFallback": { "type": "boolean" },
         "checkedAt": { "type": ["string", "null"], "format": "date-time" },
         "lastSuccessfulCheckAt": { "type": ["string", "null"], "format": "date-time" },
         "message": { "type": "string" }
