@@ -4,7 +4,7 @@
 
 - 앱: Reset Signal (이전 이름: Tibo Reset Signal) · Apple ID `6808099012`
 - 번들: `com.sundaynighttt.tiboresetsignal.ios`
-- 버전: `1.0 (10)` · iPhone 전용 · iOS 17 이상 · 표시명 변경 후보
+- 버전: `1.0 (10)` · iPhone 전용 · iOS 17 이상 · 표시명 변경 후보, Apple 처리 완료
 - 이전 `1.0 (9)`는 App Store Connect 처리 완료 및 심사 빌드 연결을 확인했다. 새 빌드 10의 검증·업로드 상태는 아래에 별도로 기록한다.
 - 심사 요청 전. 업로드 성공을 처리 완료·심사 제출·승인으로 간주하지 않는다.
 - 미확정: 타사 콘텐츠 이용 권한 선언, 연령 등급·무료 가격과 배포 지역·전체 필수 항목 검증.
@@ -12,7 +12,7 @@
 - App Store Connect 저장 확인: 한국어 부제·유틸리티 카테고리, 로그인 불필요·수동 출시, 개인정보 처리방침 URL, 6.9형 스크린샷 2장(상태 → 안내).
 - 이전 이름의 제품 설명·프로모션 문구·키워드·지원 URL·저작권·심사 메모와 연락처 저장 및 재접속 후 보존을 확인했다. 연락처 값은 공개 문서에 기록하지 않는다.
 - 개인정보 유형·용도·연결·추적 문답은 App Store Connect에서 게시된 상태를 확인했다.
-- 새 이름·설명·프로모션 문구·심사 메모 저장과 스크린샷 2장 교체를 완료했다. 빌드 10 업로드 성공을 확인했으며 Apple 처리 완료·심사 빌드 연결은 별도 확인한다. 콘텐츠 권한 선언은 이름 변경 승인과 별개의 확인 사항이다.
+- 새 이름·설명·프로모션 문구·심사 메모 저장과 스크린샷 2장 교체를 완료했다. 빌드 10은 Apple 처리 완료(`제출 준비 완료`) 및 기존 내부 테스터 그룹 연결을 확인하고, App Store 버전 1.0의 제출 빌드로 선택·저장했다. 콘텐츠 권한 선언은 이름 변경 승인과 별개의 확인 사항이다.
 
 ## 이름 변경 범위
 
@@ -37,7 +37,7 @@
 
 마케팅 URL: https://github.com/sundaynighttt/tibo-reset-signal
 
-개인정보 처리방침: [검증된 공개 영구 커밋 URL](https://github.com/sundaynighttt/tibo-reset-signal/blob/48daed37c4820f94902bace67e6cb58596059cfd/docs/privacy-policy.md)을 App Store Connect에 저장했다. HTTP 200 및 공개 원문 확인 완료.
+개인정보 처리방침: [검증된 공개 영구 커밋 URL](https://github.com/sundaynighttt/tibo-reset-signal/blob/a73892e2eb5ef21011b5833139616f52c3350c3f/docs/privacy-policy.md)을 App Store Connect에 저장했다. 새 이름을 반영한 공개 원문 응답 확인 완료.
 
 ### 프로모션 텍스트
 
@@ -99,7 +99,8 @@ The shared collector currently analyzes public posts by @thsottiaux using fixed 
 - `dist/app-store-screenshots/02-guide.png`: 실제 앱의 신호 안내 화면.
 - 합성 리셋 신호나 가상의 사용자 계정 잔액을 사용하지 않았다.
 - 심사 연락처는 공개 저장소에 기록하지 않는다.
-- 로컬 검증: XCTest 4개·Python 수집기 테스트 15개·서명 검증 통과. 앱·위젯의 표시명, 빌드 10, 기존 번들 ID·App Group 유지를 확인했다.
+- 로컬 검증: XCTest 4개·Python 수집기 테스트 15개·서명 검증·앱과 위젯의 개인정보 사유 plist·릴리스 원장 검사 통과. 앱·위젯의 표시명, 빌드 10, 기존 번들 ID·App Group 유지를 확인했다.
 - 시뮬레이터에서 앱·안내 화면과 기존 위젯의 새 제목 레이아웃을 확인했다. 기존 홈 화면 위젯 아래 시스템 이름에는 이전 이름 캐시가 남아 있어, 실기기 업데이트 후 시스템 레이블 갱신은 별도 확인이 필요하다.
 - 이전 PR #7의 GitHub CI는 수집기·macOS·Windows·iPhone 모두 통과했다.
-- 빌드 10: `ResetSignal-1.0-10.xcarchive` 생성 및 서명 검증 완료. 2026-09-04 06:34 KST에 Xcode의 `Upload succeeded`·`EXPORT SUCCEEDED`를 확인했다. 처리 완료·심사 제출·공개를 뜻하지 않는다.
+- 빌드 10: `ResetSignal-1.0-10.xcarchive` 생성 및 서명 검증 완료. 2026-09-04 06:34 KST에 Xcode의 `Upload succeeded`·`EXPORT SUCCEEDED`를 확인했다. 이후 [TestFlight 빌드 10](https://appstoreconnect.apple.com/teams/8874948e-3fee-4bea-a414-67a4c0f0e7d8/apps/6808099012/testflight/ios/89796342-3823-4991-914a-3ac49fceefa0)의 처리 완료와 제출 버전 연결을 확인했다. 최종 심사 요청·승인·일반 공개는 아직 아니다.
+- 코드와 한국어 문서는 PR #7 기반의 [PR #8](https://github.com/sundaynighttt/tibo-reset-signal/pull/8)로 분리했으며 병합 전이다.

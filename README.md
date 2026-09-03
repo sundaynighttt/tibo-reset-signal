@@ -19,8 +19,8 @@ Reset Signal은 **운영자가 GitHub Pages에 발행한 Codex 리셋 참고 신
 | --- | --- | --- | --- | --- | --- |
 | 최신 데스크톱<br>`latest_candidate` | **`0.1.0`** | `released` | `active` | macOS DMG와 Windows ZIP을 공개하고 체크섬 및 패키지 구성을 검증한 첫 데스크톱 릴리스 | `git:v0.1.0`<br>[외부 근거](https://github.com/sundaynighttt/tibo-reset-signal/actions/runs/33785528326)<br>[외부 근거](https://github.com/sundaynighttt/tibo-reset-signal/releases/tag/v0.1.0) |
 | 외부 공개 최신<br>`last_external` | **`0.1.0`** | `released` | `active` | macOS DMG와 Windows ZIP을 공개하고 체크섬 및 패키지 구성을 검증한 첫 데스크톱 릴리스 | `git:v0.1.0`<br>[외부 근거](https://github.com/sundaynighttt/tibo-reset-signal/actions/runs/33785528326)<br>[외부 근거](https://github.com/sundaynighttt/tibo-reset-signal/releases/tag/v0.1.0) |
-| iPhone 정식 출시 후보<br>`ios_candidate` | **`1.0 (10)`** | `local_verified` | `active` | Reset Signal 표시명과 운영자 발행 지표 중심 설명을 적용. 로컬 검증·업로드·스토어 문구 및 스크린샷 교체 완료, Apple 처리 확인 대기 | [project.yml](ios/project.yml)<br>[submission.md](docs/app-store/submission.md) |
-| iPhone 처리 확인 최신<br>`ios_last_external` | **`1.0 (9)`** | `external_processed` | `historical` | 개인정보·지원·신호 안내와 필수 API 사유를 보완한 후보. App Store Connect 처리 완료와 빌드 연결 확인, 심사 제출 전 | `git:48daed3`<br>[외부 근거](https://appstoreconnect.apple.com/apps/6808099012/testflight/ios/17f1d0e5-ce11-445f-9d1e-021e1ffdd126/metadata)<br>[submission.md](docs/app-store/submission.md) |
+| iPhone 정식 출시 후보<br>`ios_candidate` | **`1.0 (10)`** | `external_processed` | `active` | Reset Signal 표시명과 운영자 발행 지표 중심 설명을 적용. Apple 처리 완료·내부 테스터 연결 확인, 스토어 문구·스크린샷 교체 완료, 심사 제출 전 | `git:a73892e`<br>[외부 근거](https://appstoreconnect.apple.com/teams/8874948e-3fee-4bea-a414-67a4c0f0e7d8/apps/6808099012/testflight/ios/89796342-3823-4991-914a-3ac49fceefa0)<br>[project.yml](ios/project.yml)<br>[submission.md](docs/app-store/submission.md) |
+| iPhone 처리 확인 최신<br>`ios_last_external` | **`1.0 (10)`** | `external_processed` | `active` | Reset Signal 표시명과 운영자 발행 지표 중심 설명을 적용. Apple 처리 완료·내부 테스터 연결 확인, 스토어 문구·스크린샷 교체 완료, 심사 제출 전 | `git:a73892e`<br>[외부 근거](https://appstoreconnect.apple.com/teams/8874948e-3fee-4bea-a414-67a4c0f0e7d8/apps/6808099012/testflight/ios/89796342-3823-4991-914a-3ac49fceefa0)<br>[project.yml](ios/project.yml)<br>[submission.md](docs/app-store/submission.md) |
 
 ### 전체 버전 흐름
 
@@ -36,7 +36,7 @@ Reset Signal은 **운영자가 GitHub Pages에 발행한 Codex 리셋 참고 신
 | 8 | 2026-09-03 | `0.1.0 (8)` | `external_processed` | `historical` | 위젯 신호 원형을 10% 확대 | `git:7d8962d`<br>[외부 근거](https://appstoreconnect.apple.com/apps/6808099012/distribution/ios/version/inflight) |
 | 9 | 2026-09-04 | `0.1.0` | `released` | `active` | macOS DMG와 Windows ZIP을 공개하고 체크섬 및 패키지 구성을 검증한 첫 데스크톱 릴리스 | `git:v0.1.0`<br>[외부 근거](https://github.com/sundaynighttt/tibo-reset-signal/actions/runs/33785528326)<br>[외부 근거](https://github.com/sundaynighttt/tibo-reset-signal/releases/tag/v0.1.0) |
 | 10 | 2026-09-04 | `1.0 (9)` | `external_processed` | `historical` | 개인정보·지원·신호 안내와 필수 API 사유를 보완한 후보. App Store Connect 처리 완료와 빌드 연결 확인, 심사 제출 전 | `git:48daed3`<br>[외부 근거](https://appstoreconnect.apple.com/apps/6808099012/testflight/ios/17f1d0e5-ce11-445f-9d1e-021e1ffdd126/metadata)<br>[submission.md](docs/app-store/submission.md) |
-| 11 | 2026-09-04 | `1.0 (10)` | `local_verified` | `active` | Reset Signal 표시명과 운영자 발행 지표 중심 설명을 적용. 로컬 검증·업로드·스토어 문구 및 스크린샷 교체 완료, Apple 처리 확인 대기 | [project.yml](ios/project.yml)<br>[submission.md](docs/app-store/submission.md) |
+| 11 | 2026-09-04 | `1.0 (10)` | `external_processed` | `active` | Reset Signal 표시명과 운영자 발행 지표 중심 설명을 적용. Apple 처리 완료·내부 테스터 연결 확인, 스토어 문구·스크린샷 교체 완료, 심사 제출 전 | `git:a73892e`<br>[외부 근거](https://appstoreconnect.apple.com/teams/8874948e-3fee-4bea-a414-67a4c0f0e7d8/apps/6808099012/testflight/ios/89796342-3823-4991-914a-3ac49fceefa0)<br>[project.yml](ios/project.yml)<br>[submission.md](docs/app-store/submission.md) |
 <!-- project-release-ledger:end -->
 
 ## 왜 만들었나
