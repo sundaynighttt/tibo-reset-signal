@@ -10,8 +10,8 @@ struct TiboResetSignalWidget: Widget {
             TiboResetSignalWidgetView(entry: entry)
                 .containerBackground(.fill.tertiary, for: .widget)
         }
-        .configurationDisplayName("Tibo Reset Signal")
-        .description("Codex 리셋 가능성을 신호등으로 표시합니다.")
+        .configurationDisplayName(SignalConfiguration.displayName)
+        .description("운영자가 발행한 Codex 리셋 참고 신호를 확인합니다.")
         .supportedFamilies([.systemSmall])
         .contentMarginsDisabled()
     }
@@ -70,9 +70,11 @@ struct TiboResetSignalWidgetView: View {
             .overlay {
                 VStack(alignment: .leading, spacing: 7) {
                     HStack(alignment: .center) {
-                        Text("Tibo Reset")
+                        Text(SignalConfiguration.displayName)
                             .font(.headline)
                             .foregroundStyle(.black)
+                            .lineLimit(1)
+                            .minimumScaleFactor(0.8)
 
                         Spacer(minLength: 8)
 

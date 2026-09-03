@@ -2,6 +2,14 @@ import XCTest
 @testable import TiboResetSignal
 
 final class TiboResetSignalTests: XCTestCase {
+    func testRenamePreservesDataAndAppIdentity() {
+        XCTAssertEqual(SignalConfiguration.displayName, "Reset Signal")
+        XCTAssertEqual(Bundle.main.object(forInfoDictionaryKey: "CFBundleDisplayName") as? String, SignalConfiguration.displayName)
+        XCTAssertEqual(Bundle.main.bundleIdentifier, "com.sundaynighttt.tiboresetsignal.ios")
+        XCTAssertEqual(SignalConfiguration.appGroupID, "group.com.sundaynighttt.tiboresetsignal")
+        XCTAssertEqual(SignalConfiguration.endpoint.absoluteString, "https://sundaynighttt.github.io/tibo-reset-signal/latest.json")
+    }
+
     func testFreshPayloadUsesSignalLevel() {
         let now = Date()
         let payload = SignalPayload(
