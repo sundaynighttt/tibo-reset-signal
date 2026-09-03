@@ -65,7 +65,7 @@ struct TiboResetSignalWidgetView: View {
         Color.clear
             .overlay(alignment: .topLeading) {
                 SignalOrb(level: level)
-                    .offset(x: -142, y: -138)
+                    .offset(x: -156, y: -152)
             }
             .overlay {
                 VStack(alignment: .leading, spacing: 7) {
@@ -131,7 +131,7 @@ private struct SignalOrb: View {
     var body: some View {
         Circle()
             .fill(level.color)
-            .frame(width: 280, height: 280)
+            .frame(width: 308, height: 308)
             .accessibilityHidden(true)
     }
 }
