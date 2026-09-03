@@ -2,12 +2,22 @@
 
 Tibo Reset Signal은 [@thsottiaux](https://x.com/thsottiaux)의 공개 포스트에서 Codex 사용량 리셋 정황을 찾아 신호등으로 보여주는 무료 오픈소스 앱입니다.
 
-- **macOS:** 메뉴바에 `🔴/🟡/🟢 Reset 점수` 표시
-- **Windows:** 작업표시줄 또는 우상단 미니 위젯과 시스템 트레이 표시
-- **iPhone:** 홈 화면 소형 위젯과 근거 확인 앱
-- **운영 상태:** 앱 상세 화면에서 X API 크레딧을 `충분 · 약 $9.99`처럼 표시
-- 사용자 API 키, X 로그인, 쿠키, 셀프호스팅 불필요
-- 광고, 분석, 텔레메트리 없음
+## 왜 만들었나
+
+Codex를 집중적으로 쓰는 Pro 사용자에게 사용량 리셋은 단순한 알림이 아니라 작업 계획과 직결되는 정보입니다. 무거운 작업을 지금 시작할지, 다음 리셋까지 아껴 쓸지 판단하려면 리셋 가능성을 계속 확인하게 됩니다.
+
+그런데 공식적인 리셋 신호는 예고 없이 나타나는 경우가 많고, 커뮤니티가 가장 먼저 주목하는 단서는 티보의 공개 포스트입니다. 농담처럼 말하면 **“리셋 버튼은 결국 티보의 손에 있다”**는 상황입니다. 이 앱은 X를 반복해서 새로고침하지 않아도 그 신호와 근거를 바로 확인하고, 남은 사용량을 더 전략적으로 배분하기 위해 만들었습니다.
+
+## 주요 기능
+
+- **상시 신호등:** macOS 메뉴바, Windows 작업표시줄·미니 위젯·시스템 트레이, iPhone 홈 화면 위젯에서 `🔴 Red / 🟡 Yellow / 🟢 Green` 상태와 점수를 확인합니다.
+- **근거 중심 판정:** 신호를 올린 포스트와 판정 이유를 함께 보여주며, 클릭하면 해당 X 원문으로 이동합니다.
+- **자동 확인:** 수집기가 1시간마다 새 포스트를 확인하고 앱은 공개 상태를 10분마다 갱신합니다.
+- **설정 없는 사용:** 최종 사용자는 API 키, X 로그인, 계정 쿠키, 셀프호스팅을 준비할 필요가 없습니다.
+- **투명한 점수 규칙:** reset 표현, 사용량·한도 문맥, 구체적인 시간과 실행 확정 표현을 공개 규칙으로 계산합니다.
+- **오래된 정보 구분:** 수집이 2시간 이상 정상적으로 이뤄지지 않으면 Red로 오인하지 않도록 별도의 `Stale` 상태를 표시합니다.
+- **운영 비용 확인:** 상세 화면에 X API 크레딧을 `충분 · 약 $9.99`처럼 표시하고, 실제 잔액은 X Developer Console 링크에서 확인할 수 있습니다.
+- **개인정보 보호:** 광고, 분석, 텔레메트리가 없으며 최종 사용자의 계정 정보를 수집하지 않고 X 포스트 원문도 공개 JSON에 저장하지 않습니다.
 
 > 이 프로젝트는 X, OpenAI 또는 Tibo의 공식 제품이 아닙니다. 신호는 공개 포스트를 기반으로 한 규칙 기반 추정이며 실제 리셋을 보장하지 않습니다.
 
@@ -140,7 +150,11 @@ schema/     공개 JSON 계약
 
 ## English
 
-Tibo Reset Signal is a free, open-source native utility for macOS, Windows, and iPhone. It displays a rule-based estimate of public Codex reset signals from @thsottiaux as a traffic light. End users need no API key, account, cookie, or self-hosted service. It is unofficial and does not guarantee that a reset will occur.
+Tibo Reset Signal is a free, open-source native utility for macOS, Windows, and iPhone. Heavy Codex Pro users often plan expensive work around usage resets, while the earliest clues tend to appear in @thsottiaux's public posts. The app turns those clues into an always-visible traffic light, explains the evidence behind the score, and links back to the original post.
+
+It checks for new posts hourly, distinguishes stale data from a genuine Red signal, and requires no API key, X login, cookie, or self-hosted service from end users. Its scoring rules are public, and the apps also show an approximate operator API credit status with a link to verify the actual balance in X Developer Console.
+
+This project is unofficial and does not guarantee that a reset will occur.
 
 The native shells are based on patterns proven in the author's [CodexTime](https://github.com/sundaynighttt/codextime) project.
 
