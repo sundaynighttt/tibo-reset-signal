@@ -31,10 +31,22 @@ struct ContentView: View {
                     }
 
                     Link(destination: URL(string: "https://console.x.com/")!) {
-                        Label("실제 잔액 확인 · X Developer Console", systemImage: "arrow.up.right.square")
+                        Label("운영자 실제 잔액 확인 · X Developer Console", systemImage: "arrow.up.right.square")
                             .font(.footnote.weight(.semibold))
                     }
                     .padding(.top, 2)
+
+                    NavigationLink {
+                        SignalGuideView()
+                    } label: {
+                        Label("신호 안내 · 개인정보 · 지원", systemImage: "info.circle")
+                            .font(.footnote.weight(.semibold))
+                    }
+
+                    Text("비공식 참고용 신호입니다. 점수는 리셋 확률이 아니며 실제 리셋을 보장하지 않습니다.")
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
+                        .multilineTextAlignment(.center)
                 }
                 .frame(maxWidth: 520)
                 .padding(20)
@@ -94,7 +106,7 @@ private struct APICreditCard: View {
 
     var body: some View {
         HStack {
-            Label("API 크레딧", systemImage: "creditcard")
+            Label("운영 API 크레딧", systemImage: "creditcard")
                 .font(.subheadline.weight(.semibold))
             Spacer()
             Text(credits?.displayText ?? APICreditStatus.unknown.title)
@@ -104,7 +116,7 @@ private struct APICreditCard: View {
         .padding(16)
         .background(.background, in: RoundedRectangle(cornerRadius: 16))
         .accessibilityElement(children: .ignore)
-        .accessibilityLabel("API 크레딧: \(credits?.displayText ?? APICreditStatus.unknown.title)")
+        .accessibilityLabel("운영자 API 크레딧: \(credits?.displayText ?? APICreditStatus.unknown.title)")
     }
 }
 

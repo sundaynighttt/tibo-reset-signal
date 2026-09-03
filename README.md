@@ -6,6 +6,36 @@ Tibo Reset Signal은 [@thsottiaux](https://x.com/thsottiaux)의 공개 포스트
 
 [한국어](#왜-만들었나) · [English summary](#english-summary)
 
+<!-- project-release-ledger:start -->
+## 릴리스 기준과 전체 버전 흐름
+
+> 자동 관리 원장: [`docs/releases/release-ledger.json`](docs/releases/release-ledger.json) · 갱신일: `2026-09-04`
+
+### 현재 기준선
+
+| 기준 | 버전 | 단계 | 상태 | 요약 | 근거 |
+| --- | --- | --- | --- | --- | --- |
+| 최신 데스크톱<br>`latest_candidate` | **`0.1.0`** | `released` | `active` | macOS DMG와 Windows ZIP을 공개하고 체크섬 및 패키지 구성을 검증한 첫 데스크톱 릴리스 | `git:v0.1.0`<br>[외부 근거](https://github.com/sundaynighttt/tibo-reset-signal/actions/runs/33785528326)<br>[외부 근거](https://github.com/sundaynighttt/tibo-reset-signal/releases/tag/v0.1.0) |
+| 외부 공개 최신<br>`last_external` | **`0.1.0`** | `released` | `active` | macOS DMG와 Windows ZIP을 공개하고 체크섬 및 패키지 구성을 검증한 첫 데스크톱 릴리스 | `git:v0.1.0`<br>[외부 근거](https://github.com/sundaynighttt/tibo-reset-signal/actions/runs/33785528326)<br>[외부 근거](https://github.com/sundaynighttt/tibo-reset-signal/releases/tag/v0.1.0) |
+| iPhone 정식 출시 후보<br>`ios_candidate` | **`1.0 (9)`** | `local_verified` | `active` | 개인정보·지원·신호 안내와 필수 API 사유를보완한 정식 출시 후보. 로컬 검증과 업로드 완료, 심사 제출 전 | [project.yml](ios/project.yml)<br>[submission.md](docs/app-store/submission.md) |
+| iPhone 처리 확인 최신<br>`ios_last_external` | **`0.1.0 (8)`** | `external_processed` | `historical` | 위젯 신호 원형을 10% 확대 | `git:7d8962d`<br>[외부 근거](https://appstoreconnect.apple.com/apps/6808099012/distribution/ios/version/inflight) |
+
+### 전체 버전 흐름
+
+| 순서 | 날짜 | 버전 | 단계 | 상태 | 요약 | 근거 |
+| ---: | --- | --- | --- | --- | --- | --- |
+| 1 | 2026-09-03 | `0.1.0 (1)` | `external_processed` | `historical` | iPhone 앱·위젯의 최초 TestFlight 빌드 | `git:26a1c62`<br>[외부 근거](https://appstoreconnect.apple.com/apps/6808099012/distribution/ios/version/inflight) |
+| 2 | 2026-09-03 | `0.1.0 (2)` | `external_processed` | `historical` | 위젯의 제목·점수·최신 근거 구성과 대형 신호 원 도입 | `git:6735866`<br>[외부 근거](https://appstoreconnect.apple.com/apps/6808099012/distribution/ios/version/inflight) |
+| 3 | 2026-09-03 | `0.1.0 (3)` | `external_processed` | `historical` | 실기기에서 위젯 배경이 콘텐츠 레이아웃을 밀어내는 현상 수정 | `git:cbc6de6`<br>[외부 근거](https://appstoreconnect.apple.com/apps/6808099012/distribution/ios/version/inflight) |
+| 4 | 2026-09-03 | `0.1.0 (4)` | `external_processed` | `historical` | 신호 원을 확대하고 단색으로 정리 | `git:2c17c4a`<br>[외부 근거](https://appstoreconnect.apple.com/apps/6808099012/distribution/ios/version/inflight) |
+| 5 | 2026-09-03 | `0.1.0 (5)` | `external_processed` | `historical` | 위젯 제목과 점수의 정렬 개선 | `git:59af2f3`<br>[외부 근거](https://appstoreconnect.apple.com/apps/6808099012/distribution/ios/version/inflight) |
+| 6 | 2026-09-03 | `0.1.0 (6)` | `external_processed` | `historical` | 위젯 콘텐츠 여백을 조정 | `git:d856f9c`<br>[외부 근거](https://appstoreconnect.apple.com/apps/6808099012/distribution/ios/version/inflight) |
+| 7 | 2026-09-03 | `0.1.0 (7)` | `external_processed` | `historical` | 새로고침 버튼 크기와 세로 정렬 개선 | `git:ef3aed9`<br>[외부 근거](https://appstoreconnect.apple.com/apps/6808099012/distribution/ios/version/inflight) |
+| 8 | 2026-09-03 | `0.1.0 (8)` | `external_processed` | `historical` | 위젯 신호 원형을 10% 확대 | `git:7d8962d`<br>[외부 근거](https://appstoreconnect.apple.com/apps/6808099012/distribution/ios/version/inflight) |
+| 9 | 2026-09-04 | `0.1.0` | `released` | `active` | macOS DMG와 Windows ZIP을 공개하고 체크섬 및 패키지 구성을 검증한 첫 데스크톱 릴리스 | `git:v0.1.0`<br>[외부 근거](https://github.com/sundaynighttt/tibo-reset-signal/actions/runs/33785528326)<br>[외부 근거](https://github.com/sundaynighttt/tibo-reset-signal/releases/tag/v0.1.0) |
+| 10 | 2026-09-04 | `1.0 (9)` | `local_verified` | `active` | 개인정보·지원·신호 안내와 필수 API 사유를보완한 정식 출시 후보. 로컬 검증과 업로드 완료, 심사 제출 전 | [project.yml](ios/project.yml)<br>[submission.md](docs/app-store/submission.md) |
+<!-- project-release-ledger:end -->
+
 ## 왜 만들었나
 
 Codex를 집중적으로 쓰는 Pro 사용자에게 사용량 리셋은 단순한 알림이 아니라 작업 계획과 직결되는 정보입니다. 무거운 작업을 지금 시작할지, 다음 리셋까지 아껴 쓸지 판단하려면 리셋 가능성을 계속 확인하게 됩니다.
@@ -24,25 +54,6 @@ Codex를 집중적으로 쓰는 Pro 사용자에게 사용량 리셋은 단순�
 - **개인정보 보호:** 광고, 분석, 텔레메트리가 없으며 최종 사용자의 계정 정보를 수집하지 않고 X 포스트 원문도 공개 JSON에 저장하지 않습니다.
 
 > 이 프로젝트는 X, OpenAI 또는 Tibo의 공식 제품이 아닙니다. 신호는 공개 포스트를 기반으로 한 규칙 기반 추정이며 실제 리셋을 보장하지 않습니다.
-
-<!-- project-release-ledger:start -->
-## 릴리스 기준과 전체 버전 흐름
-
-> 자동 관리 원장: [`docs/releases/release-ledger.json`](docs/releases/release-ledger.json) · 갱신일: `2026-09-04`
-
-### 현재 기준선
-
-| 기준 | 버전 | 단계 | 상태 | 요약 | 근거 |
-| --- | --- | --- | --- | --- | --- |
-| 최신 후보<br>`latest_candidate` | **`0.1.0`** | `released` | `active` | macOS DMG와 Windows ZIP을 공개하고 체크섬 및 패키지 구성을 검증한 첫 데스크톱 릴리스 | `git:v0.1.0`<br>[외부 근거](https://github.com/sundaynighttt/tibo-reset-signal/actions/runs/33785528326)<br>[외부 근거](https://github.com/sundaynighttt/tibo-reset-signal/releases/tag/v0.1.0) |
-| 외부 공개 최신<br>`last_external` | **`0.1.0`** | `released` | `active` | macOS DMG와 Windows ZIP을 공개하고 체크섬 및 패키지 구성을 검증한 첫 데스크톱 릴리스 | `git:v0.1.0`<br>[외부 근거](https://github.com/sundaynighttt/tibo-reset-signal/actions/runs/33785528326)<br>[외부 근거](https://github.com/sundaynighttt/tibo-reset-signal/releases/tag/v0.1.0) |
-
-### 전체 버전 흐름
-
-| 순서 | 날짜 | 버전 | 단계 | 상태 | 요약 | 근거 |
-| ---: | --- | --- | --- | --- | --- | --- |
-| 1 | 2026-09-04 | `0.1.0` | `released` | `active` | macOS DMG와 Windows ZIP을 공개하고 체크섬 및 패키지 구성을 검증한 첫 데스크톱 릴리스 | `git:v0.1.0`<br>[외부 근거](https://github.com/sundaynighttt/tibo-reset-signal/actions/runs/33785528326)<br>[외부 근거](https://github.com/sundaynighttt/tibo-reset-signal/releases/tag/v0.1.0) |
-<!-- project-release-ledger:end -->
 
 ## 신호 의미
 
@@ -112,6 +123,8 @@ GitHub Actions (매시간 17분)
 첫 공개 릴리스의 macOS 앱은 Developer ID 서명·Apple 공증 전이며 Windows 실행 파일도 아직 코드 서명되지 않았습니다. 설치 전 공개 소스와 릴리스의 `SHA256SUMS.txt`를 확인하세요. 운영체제의 실행 차단을 해제하는 방법은 각 릴리스 설명에 적어두었습니다.
 
 iPhone 앱은 Xcode로 직접 빌드할 수 있습니다. 현재 iPhone 전용 내부 베타는 TestFlight 빌드 `0.1.0 (8)`까지 배포했습니다. 홈 화면 위젯은 큰 단색 원으로 신호를 구분하고 `Tibo Reset`, 가능성 점수, 최신 판정 근거와 X 원문 링크를 함께 보여줍니다.
+
+iPhone 정식 출시 후보 `1.0 (9)`에는 신호 안내, 앱 내 개인정보 처리방침, 지원 경로와 앱·위젯의 필수 API 사용 사유 선언을 추가했습니다. App Store 심사 및 공개 여부는 [제출 자료](docs/app-store/submission.md)의 확인된 상태를 따릅니다. 아직 App Store 다운로드 링크는 없습니다.
 
 ## 직접 빌드
 
@@ -192,7 +205,7 @@ schema/     공개 JSON 계약
 ## 개인정보와 보안
 
 - 앱은 사용자 계정이나 X 쿠키를 읽지 않습니다.
-- 앱은 공개 GitHub Pages JSON 이외의 데이터를 전송하지 않습니다.
+- 앱은 공개 GitHub Pages JSON을 HTTPS로 요청합니다. 호스팅 제공자는 IP 주소와 기본 요청 정보를 처리할 수 있으며, 자세한 내용은 [개인정보 처리방침](docs/privacy-policy.md)을 참고하세요.
 - Actions Secret은 앱·빌드 산출물·공개 JSON에 포함되지 않습니다.
 - X API의 실제 잔액과 결제정보는 저장하지 않습니다. 공개 데이터에는 로컬 계량으로 계산한 추정 잔액과 `충분 / 낮음 / 소진 / 확인 불가` 상태만 포함됩니다.
 - 민감정보는 이슈나 로그에 첨부하지 마세요. 보안 문제는 [SECURITY.md](SECURITY.md)를 참고하세요.
