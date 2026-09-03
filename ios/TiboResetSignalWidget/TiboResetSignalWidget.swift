@@ -60,43 +60,45 @@ struct TiboResetSignalWidgetView: View {
 
     var body: some View {
         let level = entry.payload?.effectiveLevel(now: entry.date) ?? .stale
-        ZStack(alignment: .topLeading) {
-            SignalOrb(level: level)
-                .offset(x: -112, y: -108)
-
-            VStack(alignment: .trailing, spacing: 7) {
-                HStack(spacing: 6) {
-                    Spacer()
-
-                    Button(intent: RefreshSignalIntent()) {
-                        Image(systemName: "arrow.clockwise")
-                            .font(.system(size: 10, weight: .bold))
-                            .frame(width: 24, height: 24)
-                            .background(.thinMaterial, in: Circle())
-                    }
-                    .buttonStyle(.plain)
-                    .tint(.secondary)
-                    .accessibilityLabel("리셋 신호 새로고침")
-
-                    Text("Tibo Reset")
-                        .font(.caption.weight(.bold))
-                        .foregroundStyle(.secondary)
-                }
-
-                Spacer(minLength: 0)
-
-                Text(statusText)
-                    .font(.system(size: 15, weight: .bold, design: .rounded))
-                    .lineLimit(1)
-                    .minimumScaleFactor(0.75)
-
-                LatestEvidenceView(evidence: entry.payload?.latestEvidence)
+        Color.clear
+            .overlay(alignment: .topLeading) {
+                SignalOrb(level: level)
+                    .offset(x: -112, y: -108)
             }
-            .padding(12)
-        }
-        .frame(maxWidth: .infinity, maxHeight: .infinity)
-        .clipped()
-        .accessibilityElement(children: .contain)
+            .overlay {
+                VStack(alignment: .trailing, spacing: 7) {
+                    HStack(spacing: 6) {
+                        Spacer()
+
+                        Button(intent: RefreshSignalIntent()) {
+                            Image(systemName: "arrow.clockwise")
+                                .font(.system(size: 10, weight: .bold))
+                                .frame(width: 24, height: 24)
+                                .background(.thinMaterial, in: Circle())
+                        }
+                        .buttonStyle(.plain)
+                        .tint(.secondary)
+                        .accessibilityLabel("리셋 신호 새로고침")
+
+                        Text("Tibo Reset")
+                            .font(.caption.weight(.bold))
+                            .foregroundStyle(.secondary)
+                    }
+
+                    Spacer(minLength: 0)
+
+                    Text(statusText)
+                        .font(.system(size: 15, weight: .bold, design: .rounded))
+                        .lineLimit(1)
+                        .minimumScaleFactor(0.75)
+
+                    LatestEvidenceView(evidence: entry.payload?.latestEvidence)
+                }
+                .padding(12)
+                .frame(maxWidth: .infinity, maxHeight: .infinity)
+            }
+            .clipped()
+            .accessibilityElement(children: .contain)
     }
 
     private var statusText: String {
