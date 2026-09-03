@@ -63,6 +63,25 @@ enum APICreditStatus: String, Codable, Equatable {
 struct APICredits: Codable, Equatable {
     let status: APICreditStatus
     let checkedAt: Date?
+    let estimatedBalanceUsd: Double?
+    let estimateRevision: String?
+
+    init(
+        status: APICreditStatus,
+        checkedAt: Date?,
+        estimatedBalanceUsd: Double? = nil,
+        estimateRevision: String? = nil
+    ) {
+        self.status = status
+        self.checkedAt = checkedAt
+        self.estimatedBalanceUsd = estimatedBalanceUsd
+        self.estimateRevision = estimateRevision
+    }
+
+    var localizedDescription: String {
+        guard let estimatedBalanceUsd else { return status.localizedName }
+        return "\(status.localizedName) · 약 $\(String(format: "%.2f", estimatedBalanceUsd))"
+    }
 }
 
 struct SignalEvidence: Codable, Equatable, Identifiable {

@@ -10,7 +10,7 @@ struct ContentView: View {
                 VStack(spacing: 18) {
                     if let payload = model.payload {
                         SignalHeroCard(payload: payload)
-                        APICreditCard(status: payload.apiCredits?.status ?? .unknown)
+                        APICreditCard(credits: payload.apiCredits)
                         evidenceSection(payload.evidence)
                     } else if let error = model.errorMessage {
                         ContentUnavailableView(
@@ -29,6 +29,12 @@ struct ContentView: View {
                             .font(.footnote)
                             .foregroundStyle(.secondary)
                     }
+
+                    Link(destination: URL(string: "https://console.x.com/")!) {
+                        Label("실제 잔액 확인 · X Developer Console", systemImage: "arrow.up.right.square")
+                            .font(.footnote.weight(.semibold))
+                    }
+                    .padding(.top, 2)
                 }
                 .frame(maxWidth: 520)
                 .padding(20)
@@ -84,21 +90,21 @@ struct ContentView: View {
 }
 
 private struct APICreditCard: View {
-    let status: APICreditStatus
+    let credits: APICredits?
 
     var body: some View {
         HStack {
             Label("API 크레딧", systemImage: "creditcard")
                 .font(.subheadline.weight(.semibold))
             Spacer()
-            Text(status.title)
+            Text(credits?.displayText ?? APICreditStatus.unknown.title)
                 .font(.subheadline.weight(.semibold))
-                .foregroundStyle(status == .exhausted ? .red : .secondary)
+                .foregroundStyle(credits?.status == .exhausted ? .red : .secondary)
         }
         .padding(16)
         .background(.background, in: RoundedRectangle(cornerRadius: 16))
         .accessibilityElement(children: .ignore)
-        .accessibilityLabel("API 크레딧: \(status.title)")
+        .accessibilityLabel("API 크레딧: \(credits?.displayText ?? APICreditStatus.unknown.title)")
     }
 }
 
@@ -172,10 +178,10 @@ private struct EvidenceRow: View {
 
 #Preview("API 크레딧 상태") {
     VStack(spacing: 12) {
-        APICreditCard(status: .sufficient)
-        APICreditCard(status: .low)
-        APICreditCard(status: .exhausted)
-        APICreditCard(status: .unknown)
+        APICreditCard(credits: APICredits(status: .sufficient, checkedAt: .now, estimatedBalanceUsd: 9.98, estimateRevision: "preview"))
+        APICreditCard(credits: APICredits(status: .low, checkedAt: .now, estimatedBalanceUsd: 0.75, estimateRevision: "preview"))
+        APICreditCard(credits: APICredits(status: .exhausted, checkedAt: .now, estimatedBalanceUsd: 0, estimateRevision: "preview"))
+        APICreditCard(credits: nil)
     }
     .padding()
     .background(Color(.systemGroupedBackground))

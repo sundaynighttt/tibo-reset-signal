@@ -14,12 +14,18 @@ final class TiboResetSignalTests: XCTestCase {
                 lastSuccessfulCheckAt: now,
                 message: nil
             ),
-            apiCredits: APICredits(status: .sufficient, checkedAt: now),
+            apiCredits: APICredits(
+                status: .sufficient,
+                checkedAt: now,
+                estimatedBalanceUsd: 9.975,
+                estimateRevision: "initial"
+            ),
             lastSeenPostId: "1",
             evidence: []
         )
         XCTAssertEqual(payload.effectiveLevel(now: now), .green)
         XCTAssertEqual(payload.apiCredits?.status.title, "충분")
+        XCTAssertEqual(payload.apiCredits?.displayText, "충분 · 약 $9.98")
     }
 
     func testFailedSourceIsStale() {

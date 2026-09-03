@@ -40,6 +40,8 @@ jobs:
         env:
           X_BEARER_TOKEN: ${{ secrets.X_BEARER_TOKEN }}
           X_CREDIT_LOW_USD: ${{ vars.X_CREDIT_LOW_USD }}
+          X_CREDIT_ESTIMATE_BASE_USD: ${{ vars.X_CREDIT_ESTIMATE_BASE_USD }}
+          X_CREDIT_ESTIMATE_REVISION: ${{ vars.X_CREDIT_ESTIMATE_REVISION }}
           TARGET_USER_ID: ${{ vars.TARGET_USER_ID }}
         run: >-
           python -m collector.collect

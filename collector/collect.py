@@ -2,13 +2,13 @@ from __future__ import annotations
 
 import argparse
 import json
-import math
 import os
 import sys
 import urllib.error
 import urllib.parse
 import urllib.request
 from dataclasses import dataclass
+from decimal import Decimal, InvalidOperation, ROUND_HALF_UP
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
 from typing import Any, Callable
@@ -22,6 +22,9 @@ X_API_BASE = "https://api.x.com/2"
 CODEX_RESET_FEED_URL = "https://codex-reset.com/api/feed"
 DAYCLAW_ITEMS_BASE_URL = "https://api.dayclaw.com/api/source/public/x"
 DEFAULT_LOW_CREDIT_USD = 1.0
+POST_READ_PRICE_USD = Decimal("0.005")
+USER_READ_PRICE_USD = Decimal("0.010")
+ESTIMATE_PRECISION_USD = Decimal("0.001")
 
 
 @dataclass(frozen=True)
@@ -31,6 +34,8 @@ class SourceResult:
     posts: list[dict[str, Any]]
     is_fallback: bool = False
     message: str | None = None
+    billed_post_reads: int = 0
+    billed_user_reads: int = 0
 
 
 def utc_now() -> datetime:
@@ -87,13 +92,17 @@ def request_json(
         raise RuntimeError(f"{source_label} returned invalid JSON") from error
 
 
-def resolve_user_id(username: str, token: str, previous: dict[str, Any]) -> str:
+def resolve_user_id(
+    username: str,
+    token: str,
+    previous: dict[str, Any],
+) -> tuple[str, int]:
     configured = os.environ.get("TARGET_USER_ID")
     if configured:
-        return configured
+        return configured, 0
     previous_target = previous.get("target") or {}
     if previous_target.get("username") == username and previous_target.get("userId"):
-        return str(previous_target["userId"])
+        return str(previous_target["userId"]), 0
 
     encoded = urllib.parse.quote(username)
     payload = request_json(
@@ -104,7 +113,7 @@ def resolve_user_id(username: str, token: str, previous: dict[str, Any]) -> str:
     user_id = (payload.get("data") or {}).get("id")
     if not user_id:
         raise RuntimeError("X API did not return the target user ID")
-    return str(user_id)
+    return str(user_id), 1
 
 
 def fetch_posts(
@@ -124,36 +133,72 @@ def fetch_posts(
     return list(payload.get("data") or [])
 
 
-def api_credit_status(total_balance: Any, low_threshold: float) -> str:
-    if isinstance(total_balance, bool):
-        raise RuntimeError("X API returned an invalid credit balance")
+def decimal_money(value: Any, label: str) -> Decimal:
+    if isinstance(value, bool):
+        raise RuntimeError(f"{label} is invalid")
     try:
-        balance = float(total_balance)
-    except (TypeError, ValueError) as error:
-        raise RuntimeError("X API did not return a credit balance") from error
-    if not math.isfinite(balance):
-        raise RuntimeError("X API returned an invalid credit balance")
+        amount = Decimal(str(value))
+    except (InvalidOperation, TypeError, ValueError) as error:
+        raise RuntimeError(f"{label} is invalid") from error
+    if not amount.is_finite():
+        raise RuntimeError(f"{label} is invalid")
+    return amount
+
+
+def api_credit_status(total_balance: Any, low_threshold: float | Decimal) -> str:
+    balance = decimal_money(total_balance, "Credit balance")
+    threshold = decimal_money(low_threshold, "Low credit threshold")
     if balance <= 0:
         return "exhausted"
-    if balance < low_threshold:
+    if balance < threshold:
         return "low"
     return "sufficient"
 
 
-def fetch_api_credit_status(
-    token: str,
+def estimate_api_credit_status(
+    previous: dict[str, Any],
+    source_result: SourceResult | None,
     now: datetime,
-    low_threshold: float = DEFAULT_LOW_CREDIT_USD,
+    token_configured: bool,
+    low_threshold: float | Decimal = DEFAULT_LOW_CREDIT_USD,
 ) -> dict[str, Any]:
     checked_at = isoformat(now)
-    if not token:
+    base_value = (os.environ.get("X_CREDIT_ESTIMATE_BASE_USD") or "").strip()
+    revision = (os.environ.get("X_CREDIT_ESTIMATE_REVISION") or "").strip()
+    if not token_configured or not base_value or not revision:
         return {"status": "unknown", "checkedAt": None}
+
     try:
-        payload = request_json(f"{X_API_BASE}/usage/credits", token, "X API credits")
-        total_balance = (payload.get("data") or {}).get("total_balance")
+        base_balance = decimal_money(base_value, "Credit estimate base")
+        if base_balance < 0:
+            raise RuntimeError("Credit estimate base is invalid")
+
+        previous_credits = previous.get("apiCredits") or {}
+        if (
+            previous_credits.get("estimateRevision") == revision
+            and previous_credits.get("estimatedBalanceUsd") is not None
+        ):
+            balance = decimal_money(
+                previous_credits["estimatedBalanceUsd"],
+                "Previous credit estimate",
+            )
+        else:
+            balance = base_balance
+        balance = max(Decimal("0"), balance)
+
+        if source_result:
+            charge = (
+                Decimal(source_result.billed_post_reads) * POST_READ_PRICE_USD
+                + Decimal(source_result.billed_user_reads) * USER_READ_PRICE_USD
+            )
+            balance = max(Decimal("0"), balance - charge)
+
+        rounded = balance.quantize(ESTIMATE_PRECISION_USD, rounding=ROUND_HALF_UP)
         return {
-            "status": api_credit_status(total_balance, low_threshold),
+            "status": api_credit_status(rounded, low_threshold),
             "checkedAt": checked_at,
+            "estimatedBalanceUsd": float(rounded),
+            "estimateRevision": revision,
         }
     except Exception:
         return {"status": "unknown", "checkedAt": checked_at}
@@ -265,8 +310,15 @@ def fetch_x_api_source(
     previous: dict[str, Any],
     since_id: str | None,
 ) -> SourceResult:
-    user_id = resolve_user_id(username, token, previous)
-    return SourceResult("x_api", user_id, fetch_posts(user_id, token, since_id))
+    user_id, billed_user_reads = resolve_user_id(username, token, previous)
+    posts = fetch_posts(user_id, token, since_id)
+    return SourceResult(
+        "x_api",
+        user_id,
+        posts,
+        billed_post_reads=len(posts),
+        billed_user_reads=billed_user_reads,
+    )
 
 
 def fetch_codex_reset_source(username: str, since_id: str | None) -> SourceResult:
@@ -327,6 +379,8 @@ def collect_live_source(
                     result.posts,
                     result.is_fallback,
                     f"Using {provider} after: {'; '.join(failures)}",
+                    result.billed_post_reads,
+                    result.billed_user_reads,
                 )
             return result
         except Exception as error:
@@ -432,18 +486,14 @@ def collect(args: argparse.Namespace) -> int:
     username = args.username
     token = (os.environ.get("X_BEARER_TOKEN") or "").strip()
     try:
-        low_credit_usd = float(
-            os.environ.get("X_CREDIT_LOW_USD", str(DEFAULT_LOW_CREDIT_USD))
+        low_credit_usd = decimal_money(
+            os.environ.get("X_CREDIT_LOW_USD", str(DEFAULT_LOW_CREDIT_USD)),
+            "Low credit threshold",
         )
-        if not math.isfinite(low_credit_usd) or low_credit_usd <= 0:
-            raise ValueError
-    except ValueError:
-        low_credit_usd = DEFAULT_LOW_CREDIT_USD
-    api_credits = (
-        {"status": "unknown", "checkedAt": None}
-        if args.fixture
-        else fetch_api_credit_status(token, now, low_credit_usd)
-    )
+        if low_credit_usd <= 0:
+            raise RuntimeError("Low credit threshold is invalid")
+    except RuntimeError:
+        low_credit_usd = Decimal(str(DEFAULT_LOW_CREDIT_USD))
 
     try:
         if args.fixture:
@@ -459,6 +509,17 @@ def collect(args: argparse.Namespace) -> int:
 
         user_id = source_result.user_id or (previous.get("target") or {}).get("userId")
         posts = source_result.posts
+        api_credits = (
+            {"status": "unknown", "checkedAt": None}
+            if args.fixture
+            else estimate_api_credit_status(
+                previous,
+                source_result,
+                now,
+                bool(token),
+                low_credit_usd,
+            )
+        )
 
         evidence = merge_active_evidence(previous, build_evidence(username, posts, now), now)
         source_payload: dict[str, Any] = {
@@ -483,6 +544,17 @@ def collect(args: argparse.Namespace) -> int:
         return 0
     except Exception as error:  # Keep the last good signal while exposing source failure.
         previous_source = previous.get("source") or {}
+        api_credits = (
+            {"status": "unknown", "checkedAt": None}
+            if args.fixture
+            else estimate_api_credit_status(
+                previous,
+                None,
+                now,
+                bool(token),
+                low_credit_usd,
+            )
+        )
         payload = {
             "schemaVersion": 1,
             "target": previous.get("target") or {"username": username, "userId": None},
