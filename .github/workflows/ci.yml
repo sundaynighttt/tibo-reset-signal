@@ -1,0 +1,68 @@
+name: CI
+
+on:
+  push:
+    branches: [main, 'codex/**']
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  collector:
+    name: Collector and schema
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Run scoring tests
+        run: python -m unittest discover -s tests
+      - name: Build fixture payload
+        run: python -m collector.collect --fixture tests/fixtures/posts.json --output /tmp/latest.json
+      - name: Verify fixture payload
+        run: |
+          python - <<'PY'
+          import json
+          payload = json.load(open('/tmp/latest.json', encoding='utf-8'))
+          assert payload['schemaVersion'] == 1
+          assert payload['signal']['level'] == 'green'
+          assert payload['evidence']
+          assert all('text' not in item for item in payload['evidence'])
+          PY
+
+  macos:
+    name: macOS Swift
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: swift test --package-path macos
+      - run: ./macos/scripts/build-macos.sh
+      - run: codesign --verify --deep --strict "macos/dist/Tibo Reset Signal.app"
+
+  ios:
+    name: iPhone widget
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install XcodeGen
+        run: command -v xcodegen >/dev/null || brew install xcodegen
+      - name: Regenerate project
+        working-directory: ios
+        run: xcodegen generate
+      - name: Build and test
+        run: ./ios/scripts/test-ios.sh
+
+  windows:
+    name: Windows WPF
+    runs-on: windows-latest
+    defaults:
+      run:
+        shell: powershell
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '8.0.x'
+      - run: .\windows\test-windows.ps1

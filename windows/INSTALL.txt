@@ -1,0 +1,9 @@
+Tibo Reset Signal for Windows
+
+1. Extract the ZIP.
+2. Open PowerShell in this folder.
+3. Run:
+   powershell -ExecutionPolicy Bypass -File .\install.ps1 -EnableStartup
+
+To uninstall:
+   powershell -ExecutionPolicy Bypass -File "$env:LOCALAPPDATA\TiboResetSignal\uninstall.ps1"

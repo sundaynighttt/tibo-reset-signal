@@ -1,0 +1,59 @@
+name: Collect and publish signal
+
+on:
+  schedule:
+    - cron: '17 * * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: github-pages
+  cancel-in-progress: false
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Load last published state
+        shell: bash
+        run: |
+          curl --fail --silent --show-error --location --retry 2 \
+            "https://sundaynighttt.github.io/tibo-reset-signal/latest.json?run=${GITHUB_RUN_ID}" \
+            --output /tmp/previous.json \
+            || cp site/latest.json /tmp/previous.json
+
+      - name: Collect and score new posts
+        id: collect
+        continue-on-error: true
+        env:
+          X_BEARER_TOKEN: ${{ secrets.X_BEARER_TOKEN }}
+          TARGET_USER_ID: ${{ vars.TARGET_USER_ID }}
+        run: >-
+          python -m collector.collect
+          --previous /tmp/previous.json
+          --output site/latest.json
+
+      - name: Add public schema
+        run: cp schema/latest.schema.json site/latest.schema.json
+      - uses: actions/configure-pages@v5
+      - uses: actions/upload-pages-artifact@v4
+        with:
+          path: site
+      - name: Deploy GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
+      - name: Surface collector failure after publishing stale state
+        if: steps.collect.outcome == 'failure'
+        run: exit 1
