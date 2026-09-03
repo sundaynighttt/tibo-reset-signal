@@ -56,6 +56,8 @@ struct SignalTimelineProvider: TimelineProvider {
 }
 
 struct TiboResetSignalWidgetView: View {
+    @Environment(\.widgetContentMargins) private var widgetContentMargins
+
     let entry: SignalEntry
 
     var body: some View {
@@ -103,7 +105,7 @@ struct TiboResetSignalWidgetView: View {
 
                     LatestEvidenceView(evidence: entry.payload?.latestEvidence)
                 }
-                .padding(12)
+                .padding(widgetContentMargins)
                 .frame(maxWidth: .infinity, maxHeight: .infinity)
             }
             .clipped()
