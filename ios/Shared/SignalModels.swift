@@ -53,6 +53,25 @@ enum APICreditStatus: String, Codable, Equatable, Sendable {
 struct APICredits: Codable, Equatable, Sendable {
     let status: APICreditStatus
     let checkedAt: Date?
+    let estimatedBalanceUsd: Double?
+    let estimateRevision: String?
+
+    init(
+        status: APICreditStatus,
+        checkedAt: Date?,
+        estimatedBalanceUsd: Double? = nil,
+        estimateRevision: String? = nil
+    ) {
+        self.status = status
+        self.checkedAt = checkedAt
+        self.estimatedBalanceUsd = estimatedBalanceUsd
+        self.estimateRevision = estimateRevision
+    }
+
+    var displayText: String {
+        guard let estimatedBalanceUsd else { return status.title }
+        return "\(status.title) · 약 $\(estimatedBalanceUsd.formatted(.number.precision(.fractionLength(2))))"
+    }
 }
 
 struct SignalEvidence: Codable, Equatable, Identifiable, Sendable {
@@ -96,7 +115,12 @@ struct SignalPayload: Codable, Equatable, Sendable {
             lastSuccessfulCheckAt: Date(),
             message: nil
         ),
-        apiCredits: APICredits(status: .sufficient, checkedAt: Date()),
+        apiCredits: APICredits(
+            status: .sufficient,
+            checkedAt: Date(),
+            estimatedBalanceUsd: 9.98,
+            estimateRevision: "preview"
+        ),
         lastSeenPostId: "1",
         evidence: [
             SignalEvidence(

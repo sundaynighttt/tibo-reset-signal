@@ -112,7 +112,7 @@ final class TiboResetSignalApp: NSObject, NSApplicationDelegate, NSMenuDelegate 
         if let payload = store.payload {
             addInfo("점수 \(payload.signal.score) / 10")
             addInfo(SignalFormatter.relativeUpdate(payload.source.lastSuccessfulCheckAt, now: store.now))
-            addInfo("API 크레딧: \(payload.apiCredits?.status.localizedName ?? "확인 불가")")
+            addInfo("API 크레딧: \(payload.apiCredits?.localizedDescription ?? "확인 불가")")
         } else {
             addInfo("공개 신호 확인 중…")
             addInfo("API 크레딧: 확인 불가")
@@ -149,6 +149,7 @@ final class TiboResetSignalApp: NSObject, NSApplicationDelegate, NSMenuDelegate 
         statusMenu.addItem(loginItem)
         statusMenu.addItem(actionItem(title: "@thsottiaux 프로필 열기", action: #selector(openProfile)))
         statusMenu.addItem(actionItem(title: "데이터 상태 열기", action: #selector(openDataStatus)))
+        statusMenu.addItem(actionItem(title: "실제 잔액 확인 · X Developer Console ↗", action: #selector(openDeveloperConsole)))
         statusMenu.addItem(.separator())
         statusMenu.addItem(actionItem(title: "종료", action: #selector(quitApplication)))
     }
@@ -198,6 +199,10 @@ final class TiboResetSignalApp: NSObject, NSApplicationDelegate, NSMenuDelegate 
 
     @objc private func openDataStatus() {
         NSWorkspace.shared.open(SignalClient.productionURL)
+    }
+
+    @objc private func openDeveloperConsole() {
+        NSWorkspace.shared.open(URL(string: "https://console.x.com/")!)
     }
 
     @objc private func quitApplication() {

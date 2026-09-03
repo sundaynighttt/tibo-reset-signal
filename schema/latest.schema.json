@@ -43,7 +43,9 @@
       "required": ["status", "checkedAt"],
       "properties": {
         "status": { "enum": ["sufficient", "low", "exhausted", "unknown"] },
-        "checkedAt": { "type": ["string", "null"], "format": "date-time" }
+        "checkedAt": { "type": ["string", "null"], "format": "date-time" },
+        "estimatedBalanceUsd": { "type": "number", "minimum": 0 },
+        "estimateRevision": { "type": "string", "minLength": 1 }
       },
       "additionalProperties": false
     },

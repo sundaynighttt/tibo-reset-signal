@@ -8,7 +8,8 @@ from collector.collect import (
     api_credit_status,
     build_evidence,
     collect_live_source,
-    fetch_api_credit_status,
+    estimate_api_credit_status,
+    fetch_x_api_source,
     normalize_codex_reset_feed,
     normalize_dayclaw_feed,
 )
@@ -20,37 +21,121 @@ class ApiCreditTests(unittest.TestCase):
         self.assertEqual(api_credit_status("0.75", 1.0), "low")
         self.assertEqual(api_credit_status(1, 1.0), "sufficient")
 
-    @patch("collector.collect.request_json")
-    def test_credit_payload_contains_status_only(self, request_json) -> None:
-        request_json.return_value = {
-            "data": {
-                "total_balance": 8.42,
-                "prepaid_balance": 7.2,
-                "free_balance": 1.22,
-            }
-        }
-
-        payload = fetch_api_credit_status(
-            "test-token",
-            datetime(2026, 9, 3, tzinfo=timezone.utc),
+    def test_estimate_deducts_only_returned_resources(self) -> None:
+        source = SourceResult(
+            "x_api",
+            "1",
+            [{"id": "1"}, {"id": "2"}, {"id": "3"}],
+            billed_post_reads=3,
+            billed_user_reads=1,
         )
+        with patch.dict(
+            os.environ,
+            {
+                "X_CREDIT_ESTIMATE_BASE_USD": "10",
+                "X_CREDIT_ESTIMATE_REVISION": "initial",
+            },
+            clear=False,
+        ):
+            payload = estimate_api_credit_status(
+                {},
+                source,
+                datetime(2026, 9, 3, tzinfo=timezone.utc),
+                True,
+            )
 
         self.assertEqual(
             payload,
-            {"status": "sufficient", "checkedAt": "2026-09-03T00:00:00Z"},
-        )
-        self.assertNotIn("balance", payload)
-
-    @patch("collector.collect.request_json")
-    def test_credit_lookup_failure_is_unknown(self, request_json) -> None:
-        request_json.side_effect = RuntimeError("temporary failure")
-
-        payload = fetch_api_credit_status(
-            "test-token",
-            datetime(2026, 9, 3, tzinfo=timezone.utc),
+            {
+                "status": "sufficient",
+                "checkedAt": "2026-09-03T00:00:00Z",
+                "estimatedBalanceUsd": 9.975,
+                "estimateRevision": "initial",
+            },
         )
 
-        self.assertEqual(payload["status"], "unknown")
+    def test_estimate_continues_from_previous_published_state(self) -> None:
+        previous = {
+            "apiCredits": {
+                "status": "sufficient",
+                "estimatedBalanceUsd": 9.975,
+                "estimateRevision": "initial",
+            }
+        }
+        source = SourceResult(
+            "x_api",
+            "1",
+            [{"id": "4"}],
+            billed_post_reads=1,
+        )
+        with patch.dict(
+            os.environ,
+            {
+                "X_CREDIT_ESTIMATE_BASE_USD": "10",
+                "X_CREDIT_ESTIMATE_REVISION": "initial",
+            },
+            clear=False,
+        ):
+            payload = estimate_api_credit_status(
+                previous,
+                source,
+                datetime(2026, 9, 3, 1, tzinfo=timezone.utc),
+                True,
+            )
+
+        self.assertEqual(payload["estimatedBalanceUsd"], 9.97)
+
+    def test_new_revision_resets_estimate_after_top_up(self) -> None:
+        previous = {
+            "apiCredits": {
+                "status": "low",
+                "estimatedBalanceUsd": 0.5,
+                "estimateRevision": "before-top-up",
+            }
+        }
+        with patch.dict(
+            os.environ,
+            {
+                "X_CREDIT_ESTIMATE_BASE_USD": "5",
+                "X_CREDIT_ESTIMATE_REVISION": "after-top-up",
+            },
+            clear=False,
+        ):
+            payload = estimate_api_credit_status(
+                previous,
+                None,
+                datetime(2026, 9, 3, tzinfo=timezone.utc),
+                True,
+            )
+
+        self.assertEqual(payload["estimatedBalanceUsd"], 5.0)
+        self.assertEqual(payload["estimateRevision"], "after-top-up")
+
+    def test_estimate_requires_operator_configuration(self) -> None:
+        with patch.dict(os.environ, {}, clear=True):
+            payload = estimate_api_credit_status(
+                {},
+                None,
+                datetime(2026, 9, 3, tzinfo=timezone.utc),
+                True,
+            )
+
+        self.assertEqual(payload, {"status": "unknown", "checkedAt": None})
+
+    @patch("collector.collect.fetch_posts")
+    @patch("collector.collect.resolve_user_id")
+    def test_x_api_source_reports_returned_billable_resources(
+        self,
+        resolve_user_id,
+        fetch_posts,
+    ) -> None:
+        resolve_user_id.return_value = ("1", 1)
+        fetch_posts.return_value = [{"id": "10"}, {"id": "11"}]
+
+        result = fetch_x_api_source("thsottiaux", "token", {}, None)
+
+        self.assertEqual(result.billed_user_reads, 1)
+        self.assertEqual(result.billed_post_reads, 2)
 
 
 class PublicFeedTests(unittest.TestCase):

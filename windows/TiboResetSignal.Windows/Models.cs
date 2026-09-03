@@ -25,7 +25,11 @@ public enum ApiCreditStatus
     Exhausted,
     Unknown
 }
-public sealed record ApiCredits(ApiCreditStatus Status, DateTimeOffset? CheckedAt);
+public sealed record ApiCredits(
+    ApiCreditStatus Status,
+    DateTimeOffset? CheckedAt,
+    double? EstimatedBalanceUsd = null,
+    string? EstimateRevision = null);
 public sealed record SignalEvidence(
     string PostId,
     Uri Url,
@@ -104,6 +108,14 @@ internal static class SignalText
         _ => "확인 불가"
     };
 
+    internal static string ApiCreditDescription(ApiCredits? credits)
+    {
+        var status = ApiCreditName(credits?.Status);
+        return credits?.EstimatedBalanceUsd is double balance
+            ? $"{status} · 약 ${balance:F2}"
+            : status;
+    }
+
     internal static string UpdateText(DateTimeOffset? date)
     {
         if (date is null) return "정상 확인 기록 없음";
@@ -128,7 +140,12 @@ internal static class SignalModelSelfTest
             "checkedAt": "2099-01-01T00:00:00Z",
             "lastSuccessfulCheckAt": "2099-01-01T00:00:00Z"
           },
-          "apiCredits": {"status": "sufficient", "checkedAt": "2099-01-01T00:00:00Z"},
+          "apiCredits": {
+            "status": "sufficient",
+            "checkedAt": "2099-01-01T00:00:00Z",
+            "estimatedBalanceUsd": 9.975,
+            "estimateRevision": "initial"
+          },
           "lastSeenPostId": "1",
           "evidence": []
         }
@@ -137,6 +154,7 @@ internal static class SignalModelSelfTest
                       ?? throw new InvalidOperationException("Payload did not decode.");
         if (payload.SchemaVersion != 1 || payload.Signal.Score != 9 ||
             payload.ApiCredits?.Status != ApiCreditStatus.Sufficient ||
+            payload.ApiCredits?.EstimatedBalanceUsd != 9.975 ||
             payload.EffectiveLevel(new DateTimeOffset(2099, 1, 1, 0, 30, 0, TimeSpan.Zero)) != SignalLevel.Green)
         {
             throw new InvalidOperationException("Signal model self-test failed.");

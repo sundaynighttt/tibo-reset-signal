@@ -15,7 +15,12 @@ final class SignalPayloadTests: XCTestCase {
             "checkedAt": "\(ISO8601DateFormatter().string(from: now))",
             "lastSuccessfulCheckAt": "\(ISO8601DateFormatter().string(from: now))"
           },
-          "apiCredits": {"status": "sufficient", "checkedAt": "\(ISO8601DateFormatter().string(from: now))"},
+          "apiCredits": {
+            "status": "sufficient",
+            "checkedAt": "\(ISO8601DateFormatter().string(from: now))",
+            "estimatedBalanceUsd": 9.975,
+            "estimateRevision": "initial"
+          },
           "lastSeenPostId": "10",
           "evidence": []
         }
@@ -24,6 +29,7 @@ final class SignalPayloadTests: XCTestCase {
         XCTAssertEqual(payload.effectiveLevel(now: now), .green)
         XCTAssertEqual(SignalFormatter.menuTitle(payload: payload, now: now), "🟢 Reset 9")
         XCTAssertEqual(payload.apiCredits?.status.localizedName, "충분")
+        XCTAssertEqual(payload.apiCredits?.localizedDescription, "충분 · 약 $9.97")
     }
 
     func testOldPayloadIsStale() throws {
