@@ -5,19 +5,141 @@
   "pointers": [
     {
       "key": "latest_candidate",
-      "label": "최신 후보",
+      "label": "최신 데스크톱",
       "releaseId": "v0-1-0"
     },
     {
       "key": "last_external",
       "label": "외부 공개 최신",
       "releaseId": "v0-1-0"
+    },
+    {
+      "key": "ios_candidate",
+      "label": "iPhone 정식 출시 후보",
+      "releaseId": "ios-v1-0-b9"
+    },
+    {
+      "key": "ios_last_external",
+      "label": "iPhone 처리 확인 최신",
+      "releaseId": "ios-v0-1-0-b8"
     }
   ],
   "releases": [
     {
-      "id": "v0-1-0",
+      "id": "ios-v0-1-0-b1",
       "sequence": 1,
+      "version": "0.1.0",
+      "build": "1",
+      "date": "2026-09-03",
+      "stage": "external_processed",
+      "status": "historical",
+      "summary": "iPhone 앱·위젯의 최초 TestFlight 빌드",
+      "evidence": [
+        "git:26a1c62",
+        "https://appstoreconnect.apple.com/apps/6808099012/distribution/ios/version/inflight"
+      ]
+    },
+    {
+      "id": "ios-v0-1-0-b2",
+      "sequence": 2,
+      "version": "0.1.0",
+      "build": "2",
+      "date": "2026-09-03",
+      "stage": "external_processed",
+      "status": "historical",
+      "summary": "위젯의 제목·점수·최신 근거 구성과 대형 신호 원 도입",
+      "evidence": [
+        "git:6735866",
+        "https://appstoreconnect.apple.com/apps/6808099012/distribution/ios/version/inflight"
+      ]
+    },
+    {
+      "id": "ios-v0-1-0-b3",
+      "sequence": 3,
+      "version": "0.1.0",
+      "build": "3",
+      "date": "2026-09-03",
+      "stage": "external_processed",
+      "status": "historical",
+      "summary": "실기기에서 위젯 배경이 콘텐츠 레이아웃을 밀어내는 현상 수정",
+      "evidence": [
+        "git:cbc6de6",
+        "https://appstoreconnect.apple.com/apps/6808099012/distribution/ios/version/inflight"
+      ]
+    },
+    {
+      "id": "ios-v0-1-0-b4",
+      "sequence": 4,
+      "version": "0.1.0",
+      "build": "4",
+      "date": "2026-09-03",
+      "stage": "external_processed",
+      "status": "historical",
+      "summary": "신호 원을 확대하고 단색으로 정리",
+      "evidence": [
+        "git:2c17c4a",
+        "https://appstoreconnect.apple.com/apps/6808099012/distribution/ios/version/inflight"
+      ]
+    },
+    {
+      "id": "ios-v0-1-0-b5",
+      "sequence": 5,
+      "version": "0.1.0",
+      "build": "5",
+      "date": "2026-09-03",
+      "stage": "external_processed",
+      "status": "historical",
+      "summary": "위젯 제목과 점수의 정렬 개선",
+      "evidence": [
+        "git:59af2f3",
+        "https://appstoreconnect.apple.com/apps/6808099012/distribution/ios/version/inflight"
+      ]
+    },
+    {
+      "id": "ios-v0-1-0-b6",
+      "sequence": 6,
+      "version": "0.1.0",
+      "build": "6",
+      "date": "2026-09-03",
+      "stage": "external_processed",
+      "status": "historical",
+      "summary": "위젯 콘텐츠 여백을 조정",
+      "evidence": [
+        "git:d856f9c",
+        "https://appstoreconnect.apple.com/apps/6808099012/distribution/ios/version/inflight"
+      ]
+    },
+    {
+      "id": "ios-v0-1-0-b7",
+      "sequence": 7,
+      "version": "0.1.0",
+      "build": "7",
+      "date": "2026-09-03",
+      "stage": "external_processed",
+      "status": "historical",
+      "summary": "새로고침 버튼 크기와 세로 정렬 개선",
+      "evidence": [
+        "git:ef3aed9",
+        "https://appstoreconnect.apple.com/apps/6808099012/distribution/ios/version/inflight"
+      ]
+    },
+    {
+      "id": "ios-v0-1-0-b8",
+      "sequence": 8,
+      "version": "0.1.0",
+      "build": "8",
+      "date": "2026-09-03",
+      "stage": "external_processed",
+      "status": "historical",
+      "summary": "위젯 신호 원형을 10% 확대",
+      "evidence": [
+        "git:7d8962d",
+        "https://appstoreconnect.apple.com/apps/6808099012/distribution/ios/version/inflight"
+      ]
+    },
+    {
+      "id": "v0-1-0",
+      "sequence": 9,
       "version": "0.1.0",
       "date": "2026-09-04",
       "stage": "released",
@@ -27,6 +149,20 @@
         "git:v0.1.0",
         "https://github.com/sundaynighttt/tibo-reset-signal/actions/runs/33785528326",
         "https://github.com/sundaynighttt/tibo-reset-signal/releases/tag/v0.1.0"
+      ]
+    },
+    {
+      "id": "ios-v1-0-b9",
+      "sequence": 10,
+      "version": "1.0",
+      "build": "9",
+      "date": "2026-09-04",
+      "stage": "local_verified",
+      "status": "active",
+      "summary": "개인정보·지원·신호 안내와 필수 API 사유를보완한 정식 출시 후보. 로컬 검증과 업로드 완료, 심사 제출 전",
+      "evidence": [
+        "ios/project.yml",
+        "docs/app-store/submission.md"
       ]
     }
   ]
