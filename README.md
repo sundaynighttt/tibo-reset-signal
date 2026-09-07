@@ -6,6 +6,25 @@ Tibo Reset Signal은 [@thsottiaux](https://x.com/thsottiaux)의 공개 포스트
 
 [한국어](#왜-만들었나) · [English summary](#english-summary)
 
+<!-- project-release-ledger:start -->
+## 릴리스 기준과 전체 버전 흐름
+
+> 자동 관리 원장: [`docs/releases/release-ledger.json`](docs/releases/release-ledger.json) · 갱신일: `2026-09-04`
+
+### 현재 기준선
+
+| 기준 | 버전 | 단계 | 상태 | 요약 | 근거 |
+| --- | --- | --- | --- | --- | --- |
+| 최신 후보<br>`latest_candidate` | **`0.1.0`** | `released` | `active` | macOS DMG와 Windows ZIP을 공개하고 체크섬 및 패키지 구성을 검증한 첫 데스크톱 릴리스 | `git:v0.1.0`<br>[외부 근거](https://github.com/sundaynighttt/tibo-reset-signal/actions/runs/33785528326)<br>[외부 근거](https://github.com/sundaynighttt/tibo-reset-signal/releases/tag/v0.1.0) |
+| 외부 공개 최신<br>`last_external` | **`0.1.0`** | `released` | `active` | macOS DMG와 Windows ZIP을 공개하고 체크섬 및 패키지 구성을 검증한 첫 데스크톱 릴리스 | `git:v0.1.0`<br>[외부 근거](https://github.com/sundaynighttt/tibo-reset-signal/actions/runs/33785528326)<br>[외부 근거](https://github.com/sundaynighttt/tibo-reset-signal/releases/tag/v0.1.0) |
+
+### 전체 버전 흐름
+
+| 순서 | 날짜 | 버전 | 단계 | 상태 | 요약 | 근거 |
+| ---: | --- | --- | --- | --- | --- | --- |
+| 1 | 2026-09-04 | `0.1.0` | `released` | `active` | macOS DMG와 Windows ZIP을 공개하고 체크섬 및 패키지 구성을 검증한 첫 데스크톱 릴리스 | `git:v0.1.0`<br>[외부 근거](https://github.com/sundaynighttt/tibo-reset-signal/actions/runs/33785528326)<br>[외부 근거](https://github.com/sundaynighttt/tibo-reset-signal/releases/tag/v0.1.0) |
+<!-- project-release-ledger:end -->
+
 ## 왜 만들었나
 
 Codex를 집중적으로 쓰는 Pro 사용자에게 사용량 리셋은 단순한 알림이 아니라 작업 계획과 직결되는 정보입니다. 무거운 작업을 지금 시작할지, 다음 리셋까지 아껴 쓸지 판단하려면 리셋 가능성을 계속 확인하게 됩니다.
@@ -83,12 +102,14 @@ GitHub Actions (매시간 17분)
 
 ## 설치
 
-GitHub Releases가 제공되면 다음 파일을 내려받을 수 있습니다.
+최신 버전은 [GitHub Releases](https://github.com/sundaynighttt/tibo-reset-signal/releases/latest)에서 내려받을 수 있습니다.
 
 | 운영체제 | 파일 | 지원 환경 |
 | --- | --- | --- |
-| macOS | `TiboResetSignal-macOS-<버전>.dmg` | macOS 13 이상 |
+| macOS | `TiboResetSignal-macOS-<버전>.dmg` | macOS 13 이상, Apple Silicon |
 | Windows | `TiboResetSignal-Windows-<버전>.zip` | Windows 10/11 |
+
+첫 공개 릴리스의 macOS 앱은 Developer ID 서명·Apple 공증 전이며 Windows 실행 파일도 아직 코드 서명되지 않았습니다. 설치 전 공개 소스와 릴리스의 `SHA256SUMS.txt`를 확인하세요. 운영체제의 실행 차단을 해제하는 방법은 각 릴리스 설명에 적어두었습니다.
 
 iPhone 앱은 Xcode로 직접 빌드할 수 있습니다. 현재 iPhone 전용 내부 베타는 TestFlight 빌드 `0.1.0 (8)`까지 배포했습니다. 홈 화면 위젯은 큰 단색 원으로 신호를 구분하고 `Tibo Reset`, 가능성 점수, 최신 판정 근거와 X 원문 링크를 함께 보여줍니다.
 
