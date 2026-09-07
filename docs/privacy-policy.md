@@ -1,10 +1,10 @@
-# Tibo Reset Signal 개인정보 처리방침
+# Reset Signal 개인정보 처리방침
 
 시행일: 2026년 9월 4일 · 운영자: sundaynighttt
 
 ## 앱에서 요청하지 않는 정보
 
-Tibo Reset Signal은 회원가입, 광고, 추적 또는 분석 SDK를 사용하지 않습니다. 이름, 이메일, 연락처, 위치, 광고 식별자, X 로그인 정보, API 키나 결제정보를 요청하지 않습니다. 사용자의 Codex 계정이나 개인 사용량을 조회하지 않습니다.
+Reset Signal(이전 이름: Tibo Reset Signal)은 회원가입, 광고, 추적 또는 분석 SDK를 사용하지 않습니다. 이름, 이메일, 연락처, 위치, 광고 식별자, X 로그인 정보, API 키나 결제정보를 요청하지 않습니다. 사용자의 Codex 계정이나 개인 사용량을 조회하지 않습니다. 이름 변경으로 데이터 처리 방식은 달라지지 않습니다.
 
 ## 네트워크와 호스팅
 
@@ -30,4 +30,4 @@ GitHub가 처리하는 접속 기록의 보관 기간과 삭제 요청은 [GitHu
 
 ## English summary
 
-Tibo Reset Signal requires no account or API key and contains no advertising, tracking, or analytics SDK. It fetches a public status file over HTTPS from GitHub Pages. GitHub receives the IP address and ordinary HTTP request information and may process access records for delivery, security, and troubleshooting under its own privacy policy. The developer does not download individual access logs or build user profiles. Public signal data is cached locally for the app and widget; it is not personal account data. External links open outside the app and are governed by the destination's policies. Please do not include sensitive information in public support issues.
+Reset Signal (formerly Tibo Reset Signal) requires no account or API key and contains no advertising, tracking, or analytics SDK. It fetches a public status file over HTTPS from GitHub Pages. GitHub receives the IP address and ordinary HTTP request information and may process access records for delivery, security, and troubleshooting under its own privacy policy. The developer does not download individual access logs or build user profiles. Public signal data is cached locally for the app and widget; it is not personal account data. External links open outside the app and are governed by the destination's policies. Please do not include sensitive information in public support issues. The rename does not change these data practices.

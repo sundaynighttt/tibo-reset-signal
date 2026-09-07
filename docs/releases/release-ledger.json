@@ -16,12 +16,12 @@
     {
       "key": "ios_candidate",
       "label": "iPhone 정식 출시 후보",
-      "releaseId": "ios-v1-0-b9"
+      "releaseId": "ios-v1-0-b10"
     },
     {
       "key": "ios_last_external",
       "label": "iPhone 처리 확인 최신",
-      "releaseId": "ios-v0-1-0-b8"
+      "releaseId": "ios-v1-0-b10"
     }
   ],
   "releases": [
@@ -157,10 +157,28 @@
       "version": "1.0",
       "build": "9",
       "date": "2026-09-04",
-      "stage": "local_verified",
-      "status": "active",
-      "summary": "개인정보·지원·신호 안내와 필수 API 사유를보완한 정식 출시 후보. 로컬 검증과 업로드 완료, 심사 제출 전",
+      "stage": "external_processed",
+      "status": "historical",
+      "summary": "개인정보·지원·신호 안내와 필수 API 사유를 보완한 후보. App Store Connect 처리 완료와 빌드 연결 확인, 심사 제출 전",
       "evidence": [
+        "git:48daed3",
+        "https://appstoreconnect.apple.com/apps/6808099012/testflight/ios/17f1d0e5-ce11-445f-9d1e-021e1ffdd126/metadata",
+        "docs/app-store/submission.md"
+      ]
+    },
+    {
+      "id": "ios-v1-0-b10",
+      "sequence": 11,
+      "version": "1.0",
+      "build": "10",
+      "date": "2026-09-04",
+      "stage": "external_processed",
+      "status": "active",
+      "summary": "Reset Signal 표시명과 운영자 발행 지표 중심 설명을 적용. 2026-09-04 App Store 최종 심사 제출·심사 대기 중 확인, 승인·수동 출시 대기",
+      "evidence": [
+        "git:a73892e",
+        "https://appstoreconnect.apple.com/apps/6808099012/distribution/reviewsubmissions/details/6c474e45-34b1-4cfc-aed6-0611f9af356d",
+        "https://appstoreconnect.apple.com/teams/8874948e-3fee-4bea-a414-67a4c0f0e7d8/apps/6808099012/testflight/ios/89796342-3823-4991-914a-3ac49fceefa0",
         "ios/project.yml",
         "docs/app-store/submission.md"
       ]

@@ -52,7 +52,7 @@ struct ContentView: View {
                 .padding(20)
             }
             .background(Color(.systemGroupedBackground))
-            .navigationTitle("Tibo Reset Signal")
+            .navigationTitle(SignalConfiguration.displayName)
             .toolbar {
                 ToolbarItem(placement: .topBarTrailing) {
                     Button {
